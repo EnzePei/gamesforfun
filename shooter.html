@@ -14,6 +14,8 @@
             --game-elements: #000000;
             --button-hover: #f5f5f7;
             --button-active: #e5e5e5;
+            --bullet: #ff3b30;
+            --power-up: #30d158;
         }
 
         :root[data-theme="dark"] {
@@ -25,6 +27,8 @@
             --game-elements: #ffffff;
             --button-hover: #2d2d2d;
             --button-active: #3d3d3d;
+            --bullet: #ff453a;
+            --power-up: #32d74b;
         }
 
         * {
@@ -90,6 +94,7 @@
             font-size: 12px;
             letter-spacing: -0.01em;
             text-align: center;
+            width: 100%;
         }
 
         .game-over {
@@ -97,30 +102,30 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 24px;
-            font-weight: 500;
-            color: var(--text);
             background: var(--surface);
-            padding: 16px 32px;
-            border-radius: 12px;
+            padding: 20px 40px;
+            border-radius: 16px;
+            text-align: center;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
-            letter-spacing: -0.02em;
             box-shadow: 0 4px 20px var(--shadow);
-            backdrop-filter: blur(8px);
         }
 
         .game-over.visible {
             opacity: 1;
+            pointer-events: auto;
         }
 
-        .game-controls {
-            position: absolute;
-            top: -50px;
-            right: 0;
-            display: flex;
-            gap: 8px;
+        .game-over h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .game-over p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
         }
 
         .control-btn {
@@ -187,12 +192,22 @@
             height: 20px;
             fill: var(--text);
         }
+
+        .power-up-indicator {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: var(--power-up);
+            font-size: 14px;
+            font-weight: 500;
+        }
     </style>
 </head>
-<body></body>
+<body>
     <div class="game-container">
         <h1 class="game-title">Space Shooter</h1>
         <div id="score" class="score">Score: 0</div>
+        <div id="powerUp" class="power-up-indicator"></div>
         
         <div class="game-controls">
             <button class="control-btn" id="restartBtn" aria-label="Restart game">
@@ -212,50 +227,98 @@
             </svg>
         </button>
 
-        <canvas id="gameCanvas" width="750" height="400"></canvas>
-        <div class="instructions">Use ← → to move, Space to shoot</div>
-        <div id="gameOver" class="game-over">Game Over</div>
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="instructions">Use arrow keys to move, Space to shoot</div>
+        <div id="gameOver" class="game-over">
+            <h2>Game Over</h2>
+            <p>Press R or click restart to try again</p>
+        </div>
     </div>
 
     <script>
+        class Bullet {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 10;  // Made wider
+                this.height = 4;  // Made shorter
+                this.speed = 7;
+                this.color = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--bullet');
+            }
+
+            update() {
+                this.x += this.speed;  // Changed from y to x movement
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = this.color;
+                ctx.fillRect(this.x, this.y - this.height/2, this.width, this.height);
+            }
+    }
+
         class Player {
             constructor(canvas) {
                 this.canvas = canvas;
-                this.width = 30;
+                this.width = 40;
                 this.height = 40;
-                this.x = canvas.width / 2 - this.width / 2;
-                this.y = canvas.height - this.height - 20;
+                this.x = 50;
+                this.y = canvas.height / 2 - this.height / 2;
                 this.speed = 5;
                 this.bullets = [];
                 this.lastShot = 0;
                 this.shootDelay = 250;
+                this.powerUpActive = false;
+                this.powerUpEndTime = 0;
             }
 
             draw(ctx) {
                 ctx.fillStyle = getComputedStyle(document.documentElement)
                     .getPropertyValue('--game-elements');
                 
-                // Draw plane shape
+                // Simplified fighter jet shape
                 ctx.beginPath();
-                ctx.moveTo(this.x + this.width/2, this.y); // nose of the plane
-                ctx.lineTo(this.x + this.width, this.y + this.height); // right bottom
-                ctx.lineTo(this.x, this.y + this.height); // left bottom
+                // Main body
+                ctx.moveTo(this.x, this.y + this.height/2);
+                ctx.lineTo(this.x + this.width*0.8, this.y + this.height*0.3);
+                ctx.lineTo(this.x + this.width, this.y + this.height/2);
+                ctx.lineTo(this.x + this.width*0.8, this.y + this.height*0.7);
                 ctx.closePath();
                 ctx.fill();
 
-                // Draw wings
+                // Wing
                 ctx.beginPath();
-                ctx.moveTo(this.x + this.width/2, this.y + this.height/2);
-                ctx.lineTo(this.x + this.width + 10, this.y + this.height/2 + 10);
-                ctx.lineTo(this.x - 10, this.y + this.height/2 + 10);
+                ctx.moveTo(this.x + this.width*0.3, this.y + this.height*0.4);
+                ctx.lineTo(this.x + this.width*0.6, this.y);
+                ctx.lineTo(this.x + this.width*0.7, this.y + this.height*0.4);
+                ctx.lineTo(this.x + this.width*0.6, this.y + this.height);
+                ctx.lineTo(this.x + this.width*0.3, this.y + this.height*0.6);
                 ctx.closePath();
                 ctx.fill();
 
-                // Draw bullets
-                this.bullets.forEach(bullet => bullet.draw(ctx));
+                // Draw engine glow if power-up is active
+                if (this.powerUpActive) {
+                    ctx.beginPath();
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y + this.height/2,
+                        0,
+                        this.x, this.y + this.height/2,
+                        this.width/2
+                    );
+                    gradient.addColorStop(0, 'rgba(50, 215, 75, 0.5)');
+                    gradient.addColorStop(1, 'rgba(50, 215, 75, 0)');
+                    ctx.fillStyle = gradient;
+                    ctx.arc(this.x, this.y + this.height/2, this.width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                        // Draw bullets
+                        this.bullets.forEach(bullet => bullet.draw(ctx));
             }
 
             move(direction) {
+                if (direction.up) this.y = Math.max(0, this.y - this.speed);
+                if (direction.down) this.y = Math.min(this.canvas.height - this.height, this.y + this.speed);
                 if (direction.left) this.x = Math.max(0, this.x - this.speed);
                 if (direction.right) this.x = Math.min(this.canvas.width - this.width, this.x + this.speed);
             }
@@ -263,16 +326,34 @@
             shoot() {
                 const now = Date.now();
                 if (now - this.lastShot >= this.shootDelay) {
-                    this.bullets.push(new Bullet(this.x + this.width/2, this.y));
+                    if (this.powerUpActive) {
+                        // Triple shot spread vertically
+                        this.bullets.push(
+                            new Bullet(this.x + this.width, this.y + this.height/2),
+                            new Bullet(this.x + this.width*0.8, this.y + this.height/2 - 15),
+                            new Bullet(this.x + this.width*0.8, this.y + this.height/2 + 15)
+                        );
+                    } else {
+                        this.bullets.push(new Bullet(this.x + this.width, this.y + this.height/2));
+                    }
                     this.lastShot = now;
                 }
             }
 
             update() {
-                this.bullets = this.bullets.filter(bullet => {
-                    bullet.update();
-                    return bullet.y > 0;
-                });
+                if (this.powerUpActive && Date.now() > this.powerUpEndTime) {
+                    this.powerUpActive = false;
+                    document.getElementById('powerUp').textContent = '';
+                }
+
+                this.bullets = this.bullets.filter(bullet => bullet.y > 0);
+                this.bullets.forEach(bullet => bullet.update());
+            }
+
+            activatePowerUp() {
+                this.powerUpActive = true;
+                this.powerUpEndTime = Date.now() + 5000; // 5 seconds duration
+                document.getElementById('powerUp').textContent = 'Triple Shot Active!';
             }
         }
 
@@ -281,50 +362,91 @@
                 this.canvas = canvas;
                 this.width = 30;
                 this.height = 30;
-                this.x = Math.random() * (canvas.width - this.width);
-                this.y = -this.height;
-                this.speed = 2;
-                this.type = Math.floor(Math.random() * 4);
+                this.x = canvas.width;
+                this.y = Math.random() * (canvas.height - this.height);
+                this.speed = 3;
+                this.type = Math.floor(Math.random() * 5);
+                this.rotation = 0;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.1;
+                this.isPowerUp = Math.random() < 0.1; // 10% chance to be a power-up
             }
 
             update() {
-                this.y += this.speed;
+                this.x -= this.speed;
+                this.rotation += this.rotationSpeed;
             }
 
             draw(ctx) {
-                ctx.fillStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--game-elements');
+                ctx.save();
+                ctx.translate(this.x + this.width/2, this.y + this.height/2);
+                ctx.rotate(this.rotation);
 
+                if (this.isPowerUp) {
+                    ctx.fillStyle = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--power-up');
+                    this.drawPowerUp(ctx);
+                } else {
+                    ctx.fillStyle = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--game-elements');
+                    this.drawEnemy(ctx);
+                }
+
+                ctx.restore();
+            }
+
+            drawPowerUp(ctx) {
+                // Draw star shape for power-up
+                this.drawStar(ctx, 0, 0, 5, this.width/2, this.width/4);
+            }
+
+            drawEnemy(ctx) {
                 switch(this.type) {
-                    case 0: // Triangle
+                    case 0: // UFO shape
                         ctx.beginPath();
-                        ctx.moveTo(this.x + this.width/2, this.y);
-                        ctx.lineTo(this.x + this.width, this.y + this.height);
-                        ctx.lineTo(this.x, this.y + this.height);
-                        ctx.closePath();
+                        ctx.ellipse(0, 0, this.width/2, this.height/4, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, this.width/3, this.height/3, 0, 0, Math.PI, true);
                         ctx.fill();
                         break;
 
                     case 1: // Diamond
                         ctx.beginPath();
-                        ctx.moveTo(this.x + this.width/2, this.y);
-                        ctx.lineTo(this.x + this.width, this.y + this.height/2);
-                        ctx.lineTo(this.x + this.width/2, this.y + this.height);
-                        ctx.lineTo(this.x, this.y + this.height/2);
+                        ctx.moveTo(0, -this.height/2);
+                        ctx.lineTo(this.width/2, 0);
+                        ctx.lineTo(0, this.height/2);
+                        ctx.lineTo(-this.width/2, 0);
                         ctx.closePath();
                         ctx.fill();
                         break;
 
-                    case 2: // Circle
-                        ctx.beginPath();
-                        ctx.arc(this.x + this.width/2, this.y + this.height/2, 
-                                this.width/2, 0, Math.PI * 2);
-                        ctx.fill();
+                    case 2: // Star
+                        this.drawStar(ctx, 0, 0, 5, this.width/2, this.width/4);
                         break;
 
-                    case 3: // Star
-                        this.drawStar(ctx, this.x + this.width/2, this.y + this.height/2, 
-                                    5, this.width/2, this.width/4);
+                    case 3: // X-shape
+                        ctx.beginPath();
+                        ctx.moveTo(-this.width/2, -this.height/2);
+                        ctx.lineTo(this.width/2, this.height/2);
+                        ctx.moveTo(this.width/2, -this.height/2);
+                        ctx.lineTo(-this.width/2, this.height/2);
+                        ctx.lineWidth = 4;
+                        ctx.strokeStyle = ctx.fillStyle;
+                        ctx.stroke();
+                        break;
+
+                    case 4: // Triangle formation
+                        for(let i = 0; i < 3; i++) {
+                            ctx.beginPath();
+                            ctx.arc(
+                                (i-1) * this.width/3,
+                                i === 1 ? -this.height/4 : this.height/4,
+                                this.width/6,
+                                0,
+                                Math.PI * 2
+                            );
+                            ctx.fill();
+                        }
                         break;
                 }
             }
@@ -348,29 +470,8 @@
                     ctx.lineTo(x, y);
                     rot += step;
                 }
-                ctx.lineTo(cx, cy - outerRadius);
                 ctx.closePath();
                 ctx.fill();
-            }
-        }
-
-        class Bullet {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.width = 4;
-                this.height = 10;
-                this.speed = 7;
-            }
-
-            update() {
-                this.y -= this.speed;
-            }
-
-            draw(ctx) {
-                ctx.fillStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--game-elements');
-                ctx.fillRect(this.x - this.width/2, this.y, this.width, this.height);
             }
         }
 
@@ -381,39 +482,50 @@
                 this.scoreElement = document.getElementById('score');
                 this.gameOverElement = document.getElementById('gameOver');
                 this.restartBtn = document.getElementById('restartBtn');
-
-                this.player = new Player(this.canvas);
-                this.enemies = [];
-                this.score = 0;
-                this.isGameOver = false;
-                this.keys = {
-                    left: false,
-                    right: false,
-                    up: false
-                };
-
-                this.lastEnemySpawn = 0;
-                this.enemySpawnDelay = 1500;
-
+                
+                this.resetGame();
                 this.setupControls();
                 this.startGameLoop();
             }
 
             setupControls() {
+                this.keys = {
+                    up: false,
+                    down: false,
+                    left: false,
+                    right: false,
+                    space: false
+                };
+
                 document.addEventListener('keydown', (e) => {
+                    if (e.code === 'ArrowUp') this.keys.up = true;
+                    if (e.code === 'ArrowDown') this.keys.down = true;
                     if (e.code === 'ArrowLeft') this.keys.left = true;
                     if (e.code === 'ArrowRight') this.keys.right = true;
-                    if (e.code === 'ArrowUp') this.keys.space = true;
+                    if (e.code === 'Space') this.keys.space = true;
                     if (e.code === 'KeyR') this.resetGame();
                 });
 
                 document.addEventListener('keyup', (e) => {
+                    if (e.code === 'ArrowUp') this.keys.up = false;
+                    if (e.code === 'ArrowDown') this.keys.down = false;
                     if (e.code === 'ArrowLeft') this.keys.left = false;
                     if (e.code === 'ArrowRight') this.keys.right = false;
-                    if (e.code === 'ArrowUp') this.keys.space = false;
+                    if (e.code === 'Space') this.keys.space = false;
                 });
 
                 this.restartBtn.addEventListener('click', () => this.resetGame());
+            }
+
+            resetGame() {
+                this.player = new Player(this.canvas);
+                this.enemies = [];
+                this.score = 0;
+                this.isGameOver = false;
+                this.scoreElement.textContent = `Score: ${this.score}`;
+                this.gameOverElement.classList.remove('visible');
+                this.lastEnemySpawn = 0;
+                this.enemySpawnDelay = 1500;
             }
 
             spawnEnemy() {
@@ -421,6 +533,8 @@
                 if (now - this.lastEnemySpawn > this.enemySpawnDelay) {
                     this.enemies.push(new Enemy(this.canvas));
                     this.lastEnemySpawn = now;
+                    // Decrease spawn delay as score increases
+                    this.enemySpawnDelay = Math.max(500, 1500 - this.score * 10);
                 }
             }
 
@@ -429,6 +543,11 @@
                     this.enemies.forEach((enemy, enemyIndex) => {
                         if (this.checkCollision(bullet, enemy)) {
                             this.player.bullets.splice(bulletIndex, 1);
+                            
+                            if (enemy.isPowerUp) {
+                                this.player.activatePowerUp();
+                            }
+                            
                             this.enemies.splice(enemyIndex, 1);
                             this.score++;
                             this.scoreElement.textContent = `Score: ${this.score}`;
@@ -445,24 +564,14 @@
 
             checkCollision(rect1, rect2) {
                 return rect1.x < rect2.x + rect2.width &&
-                       rect1.x + rect1.width > rect2.x &&
-                       rect1.y < rect2.y + rect2.height &&
-                       rect1.y + rect1.height > rect2.y;
+                    rect1.x + rect1.width > rect2.x &&
+                    rect1.y < rect2.y + rect2.height &&
+                    rect1.y + rect1.height > rect2.y;
             }
 
             gameOver() {
                 this.isGameOver = true;
                 this.gameOverElement.classList.add('visible');
-            }
-
-            resetGame() {
-                this.player = new Player(this.canvas);
-                this.enemies = [];
-                this.score = 0;
-                this.isGameOver = false;
-                this.scoreElement.textContent = `Score: ${this.score}`;
-                this.gameOverElement.classList.remove('visible');
-                this.lastEnemySpawn = 0;
             }
 
             update() {
@@ -476,7 +585,7 @@
 
                 this.enemies = this.enemies.filter(enemy => {
                     enemy.update();
-                    return enemy.y < this.canvas.height;
+                    return enemy.x + enemy.width > 0;
                 });
 
                 this.checkCollisions();
