@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Collection</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --surface: #fbfbfd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --game-elements: #000000;
+            --button-hover: #f5f5f7;
+            --button-active: #e5e5e5;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --surface: #1d1d1f;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --game-elements: #ffffff;
+            --button-hover: #2d2d2d;
+            --button-active: #3d3d3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text);
+        }
+
+        .container {
+            position: relative;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -0.003em;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .game-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 24px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+            border-radius: 16px;
+            background: var(--background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--text);
+        }
+
+        .game-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.022em;
+        }
+
+        .game-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 36px;
+            height: 36px;
+            background: var(--surface);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Game Collection</h1>
+        
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg id="lightIcon" viewBox="0 0 24 24">
+                <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"/>
+                <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20"/>
+            </svg>
+            <svg id="darkIcon" viewBox="0 0 24 24" style="display: none;">
+                <path d="M21.5287 15.9282C20.7769 15.9846 20.0074 16.0127 19.2264 15.9114C15.0165 15.3824 11.6311 11.9698 11.1307 7.75991C11.0294 6.97892 11.0575 6.20941 11.1139 5.45766C11.1983 4.37235 10.0936 3.57529 9.14876 4.06755C6.32556 5.51307 4.25435 8.29795 4.03277 11.6247C3.6964 16.8476 7.52906 21.3049 12.6846 21.6397C16.0113 21.8613 18.7962 20.2098 20.2417 17.3866C20.734 16.4418 19.9369 15.337 18.8516 15.4213"/>
+            </svg>
+        </button>
+
+        <div class="games-grid">
+            <a href="pong.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="2" y="6" width="4" height="12"/>
+                        <rect x="18" y="6" width="4" height="12"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Pong</h2>
+                <p class="game-description">Classic paddle game with modern controls and AI opponent</p>
+            </a>
+        
+            <a href="jump.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="4" y="12" width="16" height="8"/>
+                        <rect x="8" y="4" width="8" height="8"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Jump Game</h2>
+                <p class="game-description">Jump and shrink to avoid obstacles and collect points</p>
+            </a>
+        
+            <a href="breakout.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="2" y="4" width="4" height="2"/>
+                        <rect x="7" y="4" width="4" height="2"/>
+                        <rect x="12" y="4" width="4" height="2"/>
+                        <rect x="17" y="4" width="4" height="2"/>
+                        <rect x="2" y="7" width="4" height="2"/>
+                        <rect x="7" y="7" width="4" height="2"/>
+                        <rect x="12" y="7" width="4" height="2"/>
+                        <rect x="17" y="7" width="4" height="2"/>
+                        <rect x="9" y="18" width="6" height="2"/>
+                        <circle cx="12" cy="14" r="2"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Breakout</h2>
+                <p class="game-description">Break blocks and catch power-ups in this arcade classic</p>
+            </a>
+        
+            <a href="shooter.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 4L14 8H10L12 4Z"/>
+                        <rect x="11" y="8" width="2" height="8"/>
+                        <path d="M8 12L4 14L4 10L8 12Z"/>
+                        <path d="M16 12L20 14L20 10L16 12Z"/>
+                        <circle cx="12" cy="16" r="2"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Space Shooter</h2>
+                <p class="game-description">Pilot your ship and shoot down various enemy shapes</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+        darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+        themeToggle.addEventListener('click', toggleTheme);
+    </script>
+</body>
+</html>
