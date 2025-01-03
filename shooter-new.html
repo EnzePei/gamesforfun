@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --surface: #fbfbfd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --game-elements: #000000;
+            --button-hover: #f5f5f7;
+            --button-active: #e5e5e5;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --surface: #1d1d1f;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --game-elements: #ffffff;
+            --button-hover: #2d2d2d;
+            --button-active: #3d3d3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .game-container {
+            position: relative;
+            padding: 20px;
+        }
+
+        canvas {
+            background-color: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        .score {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: -0.022em;
+        }
+
+        .game-title {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.003em;
+            color: var(--text);
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+            letter-spacing: -0.01em;
+            text-align: center;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text);
+            background: var(--surface);
+            padding: 16px 32px;
+            border-radius: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            letter-spacing: -0.02em;
+            box-shadow: 0 4px 20px var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .game-over.visible {
+            opacity: 1;
+        }
+
+        .game-controls {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 36px;
+            height: 36px;
+            background: var(--surface);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+    </style>
+</head>
+<body></body>
+    <div class="game-container">
+        <h1 class="game-title">Space Shooter</h1>
+        <div id="score" class="score">Score: 0</div>
+        
+        <div class="game-controls">
+            <button class="control-btn" id="restartBtn" aria-label="Restart game">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg id="lightIcon" viewBox="0 0 24 24">
+                <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"/>
+                <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20"/>
+            </svg>
+            <svg id="darkIcon" viewBox="0 0 24 24" style="display: none;">
+                <path d="M21.5287 15.9282C20.7769 15.9846 20.0074 16.0127 19.2264 15.9114C15.0165 15.3824 11.6311 11.9698 11.1307 7.75991C11.0294 6.97892 11.0575 6.20941 11.1139 5.45766C11.1983 4.37235 10.0936 3.57529 9.14876 4.06755C6.32556 5.51307 4.25435 8.29795 4.03277 11.6247C3.6964 16.8476 7.52906 21.3049 12.6846 21.6397C16.0113 21.8613 18.7962 20.2098 20.2417 17.3866C20.734 16.4418 19.9369 15.337 18.8516 15.4213"/>
+            </svg>
+        </button>
+
+        <canvas id="gameCanvas" width="750" height="400"></canvas>
+        <div class="instructions">Use ← → to move, Space to shoot</div>
+        <div id="gameOver" class="game-over">Game Over</div>
+    </div>
+
+    <script>
+        class Player {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.width = 30;
+                this.height = 40;
+                this.x = canvas.width / 2 - this.width / 2;
+                this.y = canvas.height - this.height - 20;
+                this.speed = 5;
+                this.bullets = [];
+                this.lastShot = 0;
+                this.shootDelay = 250;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                
+                // Draw plane shape
+                ctx.beginPath();
+                ctx.moveTo(this.x + this.width/2, this.y); // nose of the plane
+                ctx.lineTo(this.x + this.width, this.y + this.height); // right bottom
+                ctx.lineTo(this.x, this.y + this.height); // left bottom
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw wings
+                ctx.beginPath();
+                ctx.moveTo(this.x + this.width/2, this.y + this.height/2);
+                ctx.lineTo(this.x + this.width + 10, this.y + this.height/2 + 10);
+                ctx.lineTo(this.x - 10, this.y + this.height/2 + 10);
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw bullets
+                this.bullets.forEach(bullet => bullet.draw(ctx));
+            }
+
+            move(direction) {
+                if (direction.left) this.x = Math.max(0, this.x - this.speed);
+                if (direction.right) this.x = Math.min(this.canvas.width - this.width, this.x + this.speed);
+            }
+
+            shoot() {
+                const now = Date.now();
+                if (now - this.lastShot >= this.shootDelay) {
+                    this.bullets.push(new Bullet(this.x + this.width/2, this.y));
+                    this.lastShot = now;
+                }
+            }
+
+            update() {
+                this.bullets = this.bullets.filter(bullet => {
+                    bullet.update();
+                    return bullet.y > 0;
+                });
+            }
+        }
+
+        class Enemy {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.width = 30;
+                this.height = 30;
+                this.x = Math.random() * (canvas.width - this.width);
+                this.y = -this.height;
+                this.speed = 2;
+                this.type = Math.floor(Math.random() * 4);
+            }
+
+            update() {
+                this.y += this.speed;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+
+                switch(this.type) {
+                    case 0: // Triangle
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + this.width/2, this.y);
+                        ctx.lineTo(this.x + this.width, this.y + this.height);
+                        ctx.lineTo(this.x, this.y + this.height);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+
+                    case 1: // Diamond
+                        ctx.beginPath();
+                        ctx.moveTo(this.x + this.width/2, this.y);
+                        ctx.lineTo(this.x + this.width, this.y + this.height/2);
+                        ctx.lineTo(this.x + this.width/2, this.y + this.height);
+                        ctx.lineTo(this.x, this.y + this.height/2);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+
+                    case 2: // Circle
+                        ctx.beginPath();
+                        ctx.arc(this.x + this.width/2, this.y + this.height/2, 
+                                this.width/2, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+
+                    case 3: // Star
+                        this.drawStar(ctx, this.x + this.width/2, this.y + this.height/2, 
+                                    5, this.width/2, this.width/4);
+                        break;
+                }
+            }
+
+            drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+                let rot = Math.PI / 2 * 3;
+                let x = cx;
+                let y = cy;
+                let step = Math.PI / spikes;
+
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    x = cx + Math.cos(rot) * outerRadius;
+                    y = cy + Math.sin(rot) * outerRadius;
+                    ctx.lineTo(x, y);
+                    rot += step;
+
+                    x = cx + Math.cos(rot) * innerRadius;
+                    y = cy + Math.sin(rot) * innerRadius;
+                    ctx.lineTo(x, y);
+                    rot += step;
+                }
+                ctx.lineTo(cx, cy - outerRadius);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        class Bullet {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 4;
+                this.height = 10;
+                this.speed = 7;
+            }
+
+            update() {
+                this.y -= this.speed;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                ctx.fillRect(this.x - this.width/2, this.y, this.width, this.height);
+            }
+        }
+
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.scoreElement = document.getElementById('score');
+                this.gameOverElement = document.getElementById('gameOver');
+                this.restartBtn = document.getElementById('restartBtn');
+
+                this.player = new Player(this.canvas);
+                this.enemies = [];
+                this.score = 0;
+                this.isGameOver = false;
+                this.keys = {
+                    left: false,
+                    right: false,
+                    up: false
+                };
+
+                this.lastEnemySpawn = 0;
+                this.enemySpawnDelay = 1500;
+
+                this.setupControls();
+                this.startGameLoop();
+            }
+
+            setupControls() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'ArrowLeft') this.keys.left = true;
+                    if (e.code === 'ArrowRight') this.keys.right = true;
+                    if (e.code === 'ArrowUp') this.keys.space = true;
+                    if (e.code === 'KeyR') this.resetGame();
+                });
+
+                document.addEventListener('keyup', (e) => {
+                    if (e.code === 'ArrowLeft') this.keys.left = false;
+                    if (e.code === 'ArrowRight') this.keys.right = false;
+                    if (e.code === 'ArrowUp') this.keys.space = false;
+                });
+
+                this.restartBtn.addEventListener('click', () => this.resetGame());
+            }
+
+            spawnEnemy() {
+                const now = Date.now();
+                if (now - this.lastEnemySpawn > this.enemySpawnDelay) {
+                    this.enemies.push(new Enemy(this.canvas));
+                    this.lastEnemySpawn = now;
+                }
+            }
+
+            checkCollisions() {
+                this.player.bullets.forEach((bullet, bulletIndex) => {
+                    this.enemies.forEach((enemy, enemyIndex) => {
+                        if (this.checkCollision(bullet, enemy)) {
+                            this.player.bullets.splice(bulletIndex, 1);
+                            this.enemies.splice(enemyIndex, 1);
+                            this.score++;
+                            this.scoreElement.textContent = `Score: ${this.score}`;
+                        }
+                    });
+                });
+
+                this.enemies.forEach(enemy => {
+                    if (this.checkCollision(this.player, enemy)) {
+                        this.gameOver();
+                    }
+                });
+            }
+
+            checkCollision(rect1, rect2) {
+                return rect1.x < rect2.x + rect2.width &&
+                       rect1.x + rect1.width > rect2.x &&
+                       rect1.y < rect2.y + rect2.height &&
+                       rect1.y + rect1.height > rect2.y;
+            }
+
+            gameOver() {
+                this.isGameOver = true;
+                this.gameOverElement.classList.add('visible');
+            }
+
+            resetGame() {
+                this.player = new Player(this.canvas);
+                this.enemies = [];
+                this.score = 0;
+                this.isGameOver = false;
+                this.scoreElement.textContent = `Score: ${this.score}`;
+                this.gameOverElement.classList.remove('visible');
+                this.lastEnemySpawn = 0;
+            }
+
+            update() {
+                if (this.isGameOver) return;
+
+                this.player.move(this.keys);
+                if (this.keys.space) this.player.shoot();
+                
+                this.player.update();
+                this.spawnEnemy();
+
+                this.enemies = this.enemies.filter(enemy => {
+                    enemy.update();
+                    return enemy.y < this.canvas.height;
+                });
+
+                this.checkCollisions();
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.player.draw(this.ctx);
+                this.enemies.forEach(enemy => enemy.draw(this.ctx));
+            }
+
+            startGameLoop() {
+                const gameLoop = () => {
+                    this.update();
+                    this.draw();
+                    requestAnimationFrame(gameLoop);
+                };
+                gameLoop();
+            }
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+        darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Start the game
+        new Game();
+    </script>
+</body>
+</html>

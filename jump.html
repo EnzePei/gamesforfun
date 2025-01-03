@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jump Game</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --surface: #fbfbfd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --game-elements: #000000;
+            --button-hover: #f5f5f7;
+            --button-active: #e5e5e5;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --surface: #1d1d1f;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --game-elements: #ffffff;
+            --button-hover: #2d2d2d;
+            --button-active: #3d3d3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .game-container {
+            position: relative;
+            padding: 20px;
+        }
+
+        canvas {
+            background-color: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        .score {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: -0.022em;
+        }
+
+        .game-title {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.003em;
+            color: var(--text);
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+            letter-spacing: -0.01em;
+            text-align: center;
+        }
+
+        .game-controls {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 36px;
+            height: 36px;
+            background: var(--surface);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text);
+            background: var(--surface);
+            padding: 16px 32px;
+            border-radius: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            letter-spacing: -0.02em;
+            box-shadow: 0 4px 20px var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .game-over.visible {
+            opacity: 1;
+        }
+
+        .difficulty-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .difficulty-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 980px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: var(--surface);
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .difficulty-btn:hover {
+            background: var(--button-hover);
+        }
+
+        .difficulty-btn.active {
+            background: var(--text);
+            color: var(--background);
+        }
+    </style>
+</head>
+<body></body>
+    <div class="game-container">
+        <h1 class="game-title">Jump Game</h1>
+        <div id="score" class="score">Score: 0</div>
+
+        <div class="game-controls">
+            <button class="control-btn" id="restartBtn" aria-label="Restart game">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+            <div class="difficulty-controls">
+                <button class="difficulty-btn" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn active" data-difficulty="medium">Medium</button>
+                <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+            </div>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg id="lightIcon" viewBox="0 0 24 24">
+                <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"/>
+                <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20"/>
+            </svg>
+            <svg id="darkIcon" viewBox="0 0 24 24" style="display: none;">
+                <path d="M21.5287 15.9282C20.7769 15.9846 20.0074 16.0127 19.2264 15.9114C15.0165 15.3824 11.6311 11.9698 11.1307 7.75991C11.0294 6.97892 11.0575 6.20941 11.1139 5.45766C11.1983 4.37235 10.0936 3.57529 9.14876 4.06755C6.32556 5.51307 4.25435 8.29795 4.03277 11.6247C3.6964 16.8476 7.52906 21.3049 12.6846 21.6397C16.0113 21.8613 18.7962 20.2098 20.2417 17.3866C20.734 16.4418 19.9369 15.337 18.8516 15.4213"/>
+            </svg>
+        </button>
+
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="instructions">Press Space or ↑ to jump, ↓ to shrink</div>
+        <div id="gameOver" class="game-over">Game Over</div>
+    </div>
+
+    <script>
+        class Player {
+            constructor(canvas, jumpForce) {
+                this.canvas = canvas;
+                this.width = 40;
+                this.height = 40;
+                this.x = 50;
+                this.y = canvas.height - this.height;
+                this.vy = 0;
+                this.gravity = 0.8;
+                this.jumpForce = jumpForce;
+                this.isJumping = false;
+                this.doubleJumpAvailable = false;
+                this.isShrunk = false;
+                this.normalSize = { width: 40, height: 40 };
+                this.shrunkSize = { width: 20, height: 20 };
+            }
+
+            shrink() {
+                if (!this.isShrunk) {
+                    this.width = this.shrunkSize.width;
+                    this.height = this.shrunkSize.height;
+                    this.y += this.normalSize.height - this.shrunkSize.height;
+                    this.isShrunk = true;
+                }
+            }
+
+            unshrink() {
+                if (this.isShrunk) {
+                    this.width = this.normalSize.width;
+                    this.height = this.normalSize.height;
+                    this.y -= this.normalSize.height - this.shrunkSize.height;
+                    this.isShrunk = false;
+                }
+            }
+
+            jump() {
+                if (!this.isJumping || this.doubleJumpAvailable) {
+                    if (this.isJumping) {
+                        this.doubleJumpAvailable = false;
+                    }
+                    this.vy = this.jumpForce;
+                    this.isJumping = true;
+                }
+            }
+
+            update() {
+                this.vy += this.gravity;
+                this.y += this.vy;
+
+                if (this.y > this.canvas.height - this.height) {
+                    this.y = this.canvas.height - this.height;
+                    this.vy = 0;
+                    this.isJumping = false;
+                }
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                if (this.isShrunk) {
+                    ctx.beginPath();
+                    ctx.arc(
+                        this.x + this.width / 2,
+                        this.y + this.height / 2,
+                        this.width / 2,
+                        0,
+                        Math.PI * 2
+                    );
+                    ctx.fill();
+                } else {
+                    ctx.fillRect(this.x, this.y, this.width, this.height);
+                }
+            }
+        }
+
+        class Obstacle {
+            constructor(canvas, type = 'normal') {
+                this.canvas = canvas;
+                this.type = type;
+                this.width = type === 'pillar' ? 60 : 20;
+                this.height = this.getHeight();
+                this.x = canvas.width;
+                this.y = this.getY();
+                this.speed = 6;
+            }
+
+            getHeight() {
+                switch(this.type) {
+                    case 'tall': return 80;
+                    case 'short': return 30;
+                    case 'floating': return 40;
+                    case 'pillar': return 120;
+                    default: return 40;
+                }
+            }
+
+            getY() {
+                switch(this.type) {
+                    case 'floating':
+                        // Random height between 23 and 40 from the ground
+                        const minHeight = 23;
+                        const maxHeight = 40;
+                        const randomHeight = Math.floor(Math.random() * (maxHeight - minHeight + 1)) + minHeight;
+                        return this.canvas.height - this.height - randomHeight;
+                    case 'pillar':
+                        return 0; // Pillars come from the top
+                    default:
+                        return this.canvas.height - this.height;
+                }
+            }
+
+            update() {
+                this.x -= this.speed;
+            }
+
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+        }
+
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.scoreElement = document.getElementById('score');
+                this.gameOverElement = document.getElementById('gameOver');
+                this.restartBtn = document.getElementById('restartBtn');
+
+                this.difficulty = {
+                    easy: {
+                        obstacleSpeed: 5,
+                        spawnInterval: 2000,
+                        pillarInterval: 4000,
+                        jumpForce: -14
+                    },
+                    medium: {
+                        obstacleSpeed: 7,
+                        spawnInterval: 1500,
+                        pillarInterval: 3000,
+                        jumpForce: -15
+                    },
+                    hard: {
+                        obstacleSpeed: 9,
+                        spawnInterval: 1200,
+                        pillarInterval: 2500,
+                        jumpForce: -16
+                    }
+                };
+
+                this.currentDifficulty = 'medium';
+                this.setupDifficultyButtons();
+                
+                this.player = new Player(this.canvas, this.difficulty[this.currentDifficulty].jumpForce);
+                this.obstacles = [];
+                this.score = 0;
+                this.isGameOver = false;
+                this.spawnInterval = this.difficulty[this.currentDifficulty].spawnInterval;
+                this.pillarInterval = this.difficulty[this.currentDifficulty].pillarInterval;
+                this.lastSpawnTime = 0;
+                this.lastPillarTime = 0;
+
+                this.setupControls();
+                this.startGameLoop();
+            }
+
+            setupDifficultyButtons() {
+                const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+                difficultyBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Remove active class from all buttons
+                        difficultyBtns.forEach(b => b.classList.remove('active'));
+                        // Add active class to clicked button
+                        btn.classList.add('active');
+                        
+                        this.currentDifficulty = btn.dataset.difficulty;
+                        this.resetGame();
+                    });
+                });
+            }
+
+            setupControls() {
+                document.addEventListener('keydown', (e) => {
+                    if ((e.code === 'Space' || e.code === 'ArrowUp') && !this.isGameOver) {
+                        this.player.jump();
+                    }
+                    if (e.code === 'ArrowDown') {
+                        this.player.shrink();
+                    }
+                    if (e.code === 'KeyR') {
+                        this.resetGame();
+                    }
+                });
+
+                document.addEventListener('keyup', (e) => {
+                    if (e.code === 'ArrowDown') {
+                        this.player.unshrink();
+                    }
+                });
+
+                this.restartBtn.addEventListener('click', () => this.resetGame());
+            }
+
+            spawnObstacle() {
+                const now = Date.now();
+                const settings = this.difficulty[this.currentDifficulty];
+
+                if (now - this.lastSpawnTime > settings.spawnInterval) {
+                    const types = ['normal', 'tall', 'short', 'floating'];
+                    const randomType = types[Math.floor(Math.random() * types.length)];
+                    const obstacle = new Obstacle(this.canvas, randomType);
+                    obstacle.speed = settings.obstacleSpeed;
+                    this.obstacles.push(obstacle);
+                    this.lastSpawnTime = now;
+                }
+
+                if (now - this.lastPillarTime > settings.pillarInterval) {
+                    const pillar = new Obstacle(this.canvas, 'pillar');
+                    pillar.speed = settings.obstacleSpeed;
+                    this.obstacles.push(pillar);
+                    this.lastPillarTime = now;
+                }
+            }
+
+            checkCollision(player, obstacle) {
+                return player.x < obstacle.x + obstacle.width &&
+                       player.x + player.width > obstacle.x &&
+                       player.y < obstacle.y + obstacle.height &&
+                       player.y + player.height > obstacle.y;
+            }
+
+            updateScore() {
+                this.score++;
+                this.scoreElement.textContent = `Score: ${this.score}`;
+            }
+
+            gameOver() {
+                this.isGameOver = true;
+                this.gameOverElement.classList.add('visible');
+            }
+
+            resetGame() {
+                const settings = this.difficulty[this.currentDifficulty];
+                this.player = new Player(this.canvas, settings.jumpForce);
+                this.obstacles = [];
+                this.score = 0;
+                this.isGameOver = false;
+                this.spawnInterval = settings.spawnInterval;
+                this.pillarInterval = settings.pillarInterval;
+                this.scoreElement.textContent = `Score: ${this.score}`;
+                this.gameOverElement.classList.remove('visible');
+                this.lastSpawnTime = 0;
+                this.lastPillarTime = 0;
+            }
+
+            update() {
+                if (this.isGameOver) return;
+
+                this.player.update();
+                this.spawnObstacle();
+
+                this.obstacles = this.obstacles.filter(obstacle => {
+                    obstacle.update();
+                    
+                    if (this.checkCollision(this.player, obstacle)) {
+                        this.gameOver();
+                    }
+
+                    if (obstacle.x + obstacle.width < 0) {
+                        this.updateScore();
+                        return false;
+                    }
+                    return true;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.player.draw(this.ctx);
+                this.obstacles.forEach(obstacle => obstacle.draw(this.ctx));
+            }
+
+            startGameLoop() {
+                const gameLoop = () => {
+                    this.update();
+                    this.draw();
+                    requestAnimationFrame(gameLoop);
+                };
+                gameLoop();
+            }
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+        darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Start the game
+        new Game();
+    </script>
+</body>
+</html>

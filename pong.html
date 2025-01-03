@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #86868b;
+            --surface: #fbfbfd;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --game-elements: #000000;
+            --button-hover: #f5f5f7;
+            --button-active: #e5e5e5;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --text-secondary: #86868b;
+            --surface: #1d1d1f;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --game-elements: #ffffff;
+            --button-hover: #2d2d2d;
+            --button-active: #3d3d3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .game-container {
+            position: relative;
+            padding: 20px;
+        }
+
+        canvas {
+            background-color: var(--surface);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        .score {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text);
+            letter-spacing: -0.022em;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .difficulty-btn, .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 980px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: var(--surface);
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .mode-btn {
+            margin-left: 8px;
+        }
+
+        .difficulty-btn:hover, .mode-btn:hover {
+            background: var(--button-hover);
+        }
+
+        .difficulty-btn.active, .mode-btn.active {
+            background: var(--text);
+            color: var(--background);
+        }
+
+        .game-title {
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.003em;
+            color: var(--text);
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-secondary);
+            font-size: 12px;
+            letter-spacing: -0.01em;
+            text-align: center;
+            width: 100%;
+        }
+
+        .game-controls {
+            position: absolute;
+            top: 30px;
+            left: 40px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: var(--surface);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 36px;
+            height: 36px;
+            background: var(--surface);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+            z-index: 100;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .theme-toggle:active {
+            transform: translateY(0);
+            background: var(--button-active);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text);
+        }
+
+        .game-paused {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 500;
+            color: var(--text);
+            background: var(--surface);
+            padding: 16px 32px;
+            border-radius: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            letter-spacing: -0.02em;
+            box-shadow: 0 4px 20px var(--shadow);
+            backdrop-filter: blur(8px);
+        }
+
+        .game-paused.visible {
+            opacity: 1;
+        }
+
+        .countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--text);
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .round-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            font-size: 48px;
+            font-weight: 600;
+            color: var(--text);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            letter-spacing: -0.02em;
+            text-align: center;
+            background: var(--surface);
+            padding: 20px 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .difficulty-controls {
+            display: flex;
+            gap: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .difficulty-controls.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">Pong</h1>
+        <div id="score" class="score">Player 0 — Bot 0</div>
+        
+        <div class="controls">
+            <div class="difficulty-controls">
+                <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+            </div>
+            <button class="mode-btn" id="modeBtn">PvP Mode</button>
+        </div>
+
+        <div class="game-controls">
+            <button class="control-btn" id="pauseBtn" aria-label="Pause game">
+                <svg id="pauseIcon" viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+                <svg id="playIcon" viewBox="0 0 24 24" style="display: none;">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </button>
+            <button class="control-btn" id="restartBtn" aria-label="Restart game">
+                <svg viewBox="0 0 24 24">
+                    <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <svg id="lightIcon" viewBox="0 0 24 24">
+                <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z"/>
+                <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20"/>
+            </svg>
+            <svg id="darkIcon" viewBox="0 0 24 24" style="display: none;">
+                <path d="M21.5287 15.9282C20.7769 15.9846 20.0074 16.0127 19.2264 15.9114C15.0165 15.3824 11.6311 11.9698 11.1307 7.75991C11.0294 6.97892 11.0575 6.20941 11.1139 5.45766C11.1983 4.37235 10.0936 3.57529 9.14876 4.06755C6.32556 5.51307 4.25435 8.29795 4.03277 11.6247C3.6964 16.8476 7.52906 21.3049 12.6846 21.6397C16.0113 21.8613 18.7962 20.2098 20.2417 17.3866C20.734 16.4418 19.9369 15.337 18.8516 15.4213"/>
+            </svg>
+        </button>
+
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        <div class="instructions">Use W/S keys for Player 1, ↑/↓ arrows for Player 2</div>
+    </div>
+    <script>
+        class Paddle {
+            constructor(x, y, width, height, speed) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+                this.speed = speed;
+                this.score = 0;
+            }
+        
+            move(direction, canvasHeight) {
+                this.y += direction * this.speed;
+                this.y = Math.max(0, Math.min(canvasHeight - this.height, this.y));
+            }
+        
+            draw(ctx) {
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+        }
+        
+        class Ball {
+            constructor(x, y, radius, speedX, speedY) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.speedX = speedX;
+                this.speedY = speedY;
+                this.initialSpeedX = speedX;
+                this.maxSpeed = 15;
+                this.acceleration = 1.05;
+            }
+        
+            checkPaddleCollision(paddle) {
+                return this.x - this.radius < paddle.x + paddle.width &&
+                       this.x + this.radius > paddle.x &&
+                       this.y > paddle.y &&
+                       this.y < paddle.y + paddle.height;
+            }
+        
+            update(canvas, player, bot) {
+                this.x += this.speedX;
+                this.y += this.speedY;
+        
+                if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) {
+                    this.speedY = -this.speedY;
+                }
+        
+                if (this.checkPaddleCollision(player) || this.checkPaddleCollision(bot)) {
+                    const paddle = this.x < canvas.width / 2 ? player : bot;
+                    const relativeIntersectY = (paddle.y + (paddle.height / 2)) - this.y;
+                    const normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
+                    const bounceAngle = normalizedIntersectY * Math.PI / 4;
+        
+                    const direction = this.x < canvas.width / 2 ? 1 : -1;
+                    const currentSpeed = Math.sqrt(this.speedX * this.speedX + this.speedY * this.speedY);
+                    const newSpeed = Math.min(currentSpeed * this.acceleration, this.maxSpeed);
+        
+                    this.speedX = direction * Math.cos(bounceAngle) * newSpeed;
+                    this.speedY = -Math.sin(bounceAngle) * newSpeed;
+                }
+            }
+        
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--game-elements');
+                ctx.fill();
+                ctx.closePath();
+            }
+        
+            reset(canvas) {
+                this.x = canvas.width / 2;
+                this.y = canvas.height / 2;
+                this.speedX = -this.initialSpeedX;
+                this.speedY = (Math.random() - 0.5) * 6;
+            }
+        }
+        
+        class Game {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.scoreElement = document.getElementById('score');
+                
+                const paddleWidth = 10;
+                const paddleHeight = 100;
+                const paddleSpeed = 5;
+        
+                this.player = new Paddle(0, this.canvas.height/2 - paddleHeight/2, 
+                                       paddleWidth, paddleHeight, paddleSpeed);
+                this.bot = new Paddle(this.canvas.width - paddleWidth, 
+                                    this.canvas.height/2 - paddleHeight/2,
+                                    paddleWidth, paddleHeight, 4);
+                this.ball = new Ball(this.canvas.width/2, this.canvas.height/2, 10, 5, 3);
+        
+                this.keys = { up: false, down: false, w: false, s: false };
+                this.difficulty = {
+                    easy: { 
+                        botSpeed: 4,
+                        botReactionDistance: 50,
+                        ballSpeedMultiplier: 0.8,
+                        botPredictionError: 30,
+                        smoothing: 0.08
+                    },
+                    medium: { 
+                        botSpeed: 5,
+                        botReactionDistance: 35,
+                        ballSpeedMultiplier: 1,
+                        botPredictionError: 20,
+                        smoothing: 0.1
+                    },
+                    hard: { 
+                        botSpeed: 6,
+                        botReactionDistance: 20,
+                        ballSpeedMultiplier: 1.2,
+                        botPredictionError: 10,
+                        smoothing: 0.15
+                    }
+                };
+
+                this.difficultyControls = document.querySelector('.difficulty-controls');
+                
+                this.currentDifficulty = 'easy';
+                this.isPaused = false;
+                this.isRestarting = false;
+                this.isScoring = false;
+                this.round = 1;
+                this.lastBotY = this.bot.y;
+                this.scoreFormat = '0 — 0';
+                this.isPvPMode = false;
+        
+                this.setupUI();
+                this.setupControls();
+                this.setupDifficultyButtons();
+                this.setupModeButton();
+                this.startGameLoop();
+            }
+        
+            setupUI() {
+                this.pauseBtn = document.getElementById('pauseBtn');
+                this.playIcon = document.getElementById('playIcon');
+                this.pauseIcon = document.getElementById('pauseIcon');
+                this.restartBtn = document.getElementById('restartBtn');
+                this.gameContainer = document.querySelector('.game-container');
+        
+                this.pauseOverlay = document.createElement('div');
+                this.pauseOverlay.className = 'game-paused';
+                this.pauseOverlay.textContent = 'Game Paused';
+                this.gameContainer.appendChild(this.pauseOverlay);
+        
+                this.countdownElement = document.createElement('div');
+                this.countdownElement.className = 'countdown';
+                this.gameContainer.appendChild(this.countdownElement);
+        
+                this.roundElement = document.createElement('div');
+                this.roundElement.className = 'round-display';
+                this.gameContainer.appendChild(this.roundElement);
+            }
+        
+            setupModeButton() {
+                this.modeBtn = document.getElementById('modeBtn');
+                this.modeBtn.addEventListener('click', () => {
+                    this.isPvPMode = !this.isPvPMode;
+                    this.modeBtn.classList.toggle('active');
+                    this.modeBtn.textContent = this.isPvPMode ? 'Bot Mode' : 'PvP Mode';
+                    this.resetGame();
+                });
+            }
+        
+            setupControls() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowUp') this.keys.up = true;
+                    if (e.key === 'ArrowDown') this.keys.down = true;
+                    if (e.key === 'w') this.keys.w = true;
+                    if (e.key === 's') this.keys.s = true;
+                    if (e.key === 'Escape') this.togglePause();
+                    if (e.key === 'r') this.resetGame();
+                });
+        
+                document.addEventListener('keyup', (e) => {
+                    if (e.key === 'ArrowUp') this.keys.up = false;
+                    if (e.key === 'ArrowDown') this.keys.down = false;
+                    if (e.key === 'w') this.keys.w = false;
+                    if (e.key === 's') this.keys.s = false;
+                });
+        
+                this.pauseBtn.addEventListener('click', () => this.togglePause());
+                this.restartBtn.addEventListener('click', () => this.resetGame());
+            }
+        
+            setupDifficultyButtons() {
+                const buttons = document.querySelectorAll('.difficulty-btn');
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        this.currentDifficulty = button.dataset.difficulty;
+                        this.resetGame();
+                    });
+                });
+            }
+
+            setupModeButton() {
+                this.modeBtn = document.getElementById('modeBtn');
+                this.modeBtn.addEventListener('click', () => {
+                    this.isPvPMode = !this.isPvPMode;
+                    this.modeBtn.classList.toggle('active');
+                    this.modeBtn.textContent = this.isPvPMode ? 'Bot Mode' : 'PvP Mode';
+                    this.difficultyControls.classList.toggle('hidden', this.isPvPMode);
+                    
+                    // Use medium settings for PvP mode
+                    if (this.isPvPMode) {
+                        const mediumSettings = this.difficulty['medium'];
+                        this.bot.speed = mediumSettings.botSpeed;
+                        this.ball.initialSpeedX = 5 * mediumSettings.ballSpeedMultiplier;
+                        this.ball.speedX = this.ball.initialSpeedX;
+                    } else {
+                        // Restore current difficulty settings for bot mode
+                        const currentSettings = this.difficulty[this.currentDifficulty];
+                        this.bot.speed = currentSettings.botSpeed;
+                        this.ball.initialSpeedX = 5 * currentSettings.ballSpeedMultiplier;
+                        this.ball.speedX = this.ball.initialSpeedX;
+                    }
+                    
+                    this.resetGame();
+                });
+    }
+        
+            togglePause() {
+                this.isPaused = !this.isPaused;
+                this.pauseOverlay.classList.toggle('visible', this.isPaused);
+                this.playIcon.style.display = this.isPaused ? 'block' : 'none';
+                this.pauseIcon.style.display = this.isPaused ? 'none' : 'block';
+            }
+        
+            updateScore() {
+                const leftPlayer = this.isPvPMode ? 'Player 1' : 'Player';
+                const rightPlayer = this.isPvPMode ? 'Player 2' : 'Bot';
+                this.scoreElement.textContent = `${leftPlayer} ${this.scoreFormat} ${rightPlayer}`;
+            }
+        
+            async showCountdown() {
+                const countFrom = 3;
+                for (let i = countFrom; i > 0; i--) {
+                    await new Promise(resolve => {
+                        this.countdownElement.textContent = i;
+                        this.countdownElement.style.opacity = 1;
+                        this.countdownElement.style.transform = 'translate(-50%, -50%) scale(1)';
+                        
+                        setTimeout(() => {
+                            this.countdownElement.style.opacity = 0;
+                            this.countdownElement.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                            setTimeout(resolve, 500);
+                        }, 500);
+                    });
+                }
+            }
+        
+            async showRoundDisplay() {
+                this.roundElement.textContent = `Round ${this.round}`;
+                this.roundElement.style.opacity = '1';
+                this.roundElement.style.transform = 'translate(-50%, -50%) scale(1)';
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                this.roundElement.style.opacity = '0';
+                this.roundElement.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            }
+        
+            updateBot() {
+                if (this.isPvPMode) return;
+        
+                const settings = this.difficulty[this.currentDifficulty];
+                const prediction = this.predictBallPosition();
+                const randomError = (Math.random() - 0.5) * settings.botPredictionError;
+                const targetY = prediction + randomError;
+                
+                const diff = targetY - (this.bot.y + this.bot.height / 2);
+                const movement = diff * settings.smoothing;
+                
+                this.lastBotY = this.bot.y;
+                this.bot.move(movement / settings.botSpeed, this.canvas.height);
+            }
+        
+            predictBallPosition() {
+                if (this.ball.speedX > 0) {
+                    const timeToReach = (this.canvas.width - this.ball.x) / this.ball.speedX;
+                    const predictedY = this.ball.y + (this.ball.speedY * timeToReach);
+                    
+                    let finalY = predictedY;
+                    if (predictedY < 0) {
+                        finalY = Math.abs(predictedY);
+                    } else if (predictedY > this.canvas.height) {
+                        finalY = 2 * this.canvas.height - predictedY;
+                    }
+                    return finalY;
+                }
+                return this.canvas.height / 2 + (Math.random() - 0.5) * 50;
+            }
+        
+            async handlePoint(winner) {
+                if (this.isScoring) return;
+                this.isScoring = true;
+                this.isPaused = true;
+                this.round++;
+                
+                this.scoreFormat = `${this.player.score} — ${this.bot.score}`;
+                this.updateScore();
+                
+                await this.showRoundDisplay();
+                await this.ball.reset(this.canvas);
+                
+                this.isPaused = false;
+                this.isScoring = false;
+            }
+        
+            update() {
+                if (this.isPaused) return;
+        
+                // Left player controls (W/S)
+                if (!this.isPvPMode){
+                    if (this.keys.up) this.player.move(-1, this.canvas.height);
+                    if (this.keys.down) this.player.move(1, this.canvas.height);
+                }
+                if (this.keys.w) this.player.move(-1, this.canvas.height);
+                if (this.keys.s) this.player.move(1, this.canvas.height);
+        
+                // Right player/bot controls
+                if (this.isPvPMode) {
+                    if (this.keys.up) this.bot.move(-1, this.canvas.height);
+                    if (this.keys.down) this.bot.move(1, this.canvas.height);
+                } else {
+                    this.updateBot();
+                }
+                
+                const previousX = this.ball.x;
+                this.ball.update(this.canvas, this.player, this.bot);
+                
+                if (!this.isScoring && previousX > 0 && previousX < this.canvas.width) {
+                    if (this.ball.x <= 0) {
+                        this.bot.score++;
+                        this.handlePoint('bot');
+                    } else if (this.ball.x >= this.canvas.width) {
+                        this.player.score++;
+                        this.handlePoint('player');
+                    }
+                }
+            }
+        
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.player.draw(this.ctx);
+                this.bot.draw(this.ctx);
+                this.ball.draw(this.ctx);
+            }
+        
+            async resetGame() {
+                if (this.isRestarting) return;
+                this.isRestarting = true;
+        
+                if (this.isPaused) {
+                    this.togglePause();
+                }
+        
+                this.scoreFormat = '0 — 0';
+                this.updateScore();
+                this.player.score = 0;
+                this.bot.score = 0;
+                this.round = 1;
+                
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const settings = this.difficulty[this.currentDifficulty];
+                this.bot.speed = settings.botSpeed;
+                this.ball.initialSpeedX = 5 * settings.ballSpeedMultiplier;
+                this.ball.speedX = this.ball.initialSpeedX;
+        
+                await this.showRoundDisplay();
+                await this.ball.reset(this.canvas);
+                
+                this.isRestarting = false;
+            }
+        
+            startGameLoop() {
+                const gameLoop = () => {
+                    this.update();
+                    this.draw();
+                    requestAnimationFrame(gameLoop);
+                };
+                gameLoop();
+            }
+        }
+        
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+        
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            localStorage.setItem('theme', newTheme);
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+        darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        // Start the game
+        new Game();
+        </script>
+        </body>
+        </html>
