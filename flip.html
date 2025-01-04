@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip & Match</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --surface: #fbfbfd;
+            --card-back: #e5e5e5;
+            --card-front: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shape: #1d1d1f;
+            --matched: #32d74b;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --surface: #1d1d1f;
+            --card-back: #2d2d2d;
+            --card-front: #3d3d3d;
+            --shadow: rgba(255, 255, 255, 0.1);
+            --shape: #ffffff;
+            --matched: #32d74b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        .card {
+            aspect-ratio: 1;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched .card-front {
+            background-color: var(--matched);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .card-front {
+            background-color: var(--card-front);
+            transform: rotateY(180deg);
+        }
+
+        .card-back {
+            background-color: var(--card-back);
+        }
+
+        .shape {
+            width: 60%;
+            height: 60%;
+            fill: var(--shape);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            padding: 0.5rem;
+        }
+
+        .moves, .timer {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .game-board {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+    </button>
+
+    <h1 class="game-title">Flip & Match</h1>
+    
+    <div class="game-info">
+        <div class="moves">Moves: <span id="moves">0</span></div>
+        <div class="timer">Time: <span id="timer">0:00</span></div>
+    </div>
+
+    <div class="game-board" id="gameBoard"></div>
+
+    <script>
+        class FlipMatchGame {
+            constructor() {
+                this.board = document.getElementById('gameBoard');
+                this.movesDisplay = document.getElementById('moves');
+                this.timerDisplay = document.getElementById('timer');
+                this.moves = 0;
+                this.timeElapsed = 0;
+                this.timer = null;
+                this.flippedCards = [];
+                this.matchedPairs = 0;
+                this.isLocked = false;
+
+                this.shapes = [
+                    'circle', 'square', 'triangle', 'star',
+                    'pentagon', 'hexagon', 'diamond', 'heart'
+                ];
+
+                this.initGame();
+            }
+
+            initGame() {
+                this.createCards();
+                this.startTimer();
+            }
+
+            createCards() {
+                const pairs = [...this.shapes, ...this.shapes];
+                const shuffled = this.shuffleArray(pairs);
+
+                shuffled.forEach((shape, index) => {
+                    const card = this.createCard(shape, index);
+                    this.board.appendChild(card);
+                });
+            }
+
+            createCard(shape, index) {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.shape = shape;
+                card.dataset.index = index;
+
+                const front = document.createElement('div');
+                front.className = 'card-front';
+                front.innerHTML = this.getShapeSVG(shape);
+
+                const back = document.createElement('div');
+                back.className = 'card-back';
+
+                card.appendChild(front);
+                card.appendChild(back);
+
+                card.addEventListener('click', () => this.flipCard(card));
+
+                return card;
+            }
+
+            getShapeSVG(shape) {
+                const svgs = {
+                    circle: '<circle cx="50" cy="50" r="40"/>',
+                    square: '<rect x="10" y="10" width="80" height="80"/>',
+                    triangle: '<polygon points="50,10 90,90 10,90"/>',
+                    star: '<polygon points="50,10 61,35 90,35 65,55 75,80 50,65 25,80 35,55 10,35 39,35"/>',
+                    pentagon: '<polygon points="50,10 90,40 80,90 20,90 10,40"/>',
+                    hexagon: '<polygon points="50,10 90,35 90,65 50,90 10,65 10,35"/>',
+                    diamond: '<polygon points="50,10 90,50 50,90 10,50"/>',
+                    heart: '<path d="M50,80 C0,40 20,0 50,20 C80,0 100,40 50,80"/>',
+                };
+
+                return `<svg class="shape" viewBox="0 0 100 100">${svgs[shape]}</svg>`;
+            }
+
+            flipCard(card) {
+                if (
+                    this.isLocked || 
+                    this.flippedCards.length >= 2 || 
+                    card.classList.contains('flipped') ||
+                    card.classList.contains('matched')
+                ) return;
+
+                card.classList.add('flipped');
+                this.flippedCards.push(card);
+
+                if (this.flippedCards.length === 2) {
+                    this.moves++;
+                    this.movesDisplay.textContent = this.moves;
+                    this.checkMatch();
+                }
+            }
+
+            checkMatch() {
+                const [card1, card2] = this.flippedCards;
+                const match = card1.dataset.shape === card2.dataset.shape;
+
+                if (match) {
+                    this.handleMatch(card1, card2);
+                } else {
+                    this.handleMismatch(card1, card2);
+                }
+            }
+
+            handleMatch(card1, card2) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                this.flippedCards = [];
+                this.matchedPairs++;
+
+                if (this.matchedPairs === this.shapes.length) {
+                    this.endGame();
+                }
+            }
+
+            handleMismatch(card1, card2) {
+                this.isLocked = true;
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    this.flippedCards = [];
+                    this.isLocked = false;
+                }, 1000);
+            }
+
+            shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            startTimer() {
+                this.timer = setInterval(() => {
+                    this.timeElapsed++;
+                    const minutes = Math.floor(this.timeElapsed / 60);
+                    const seconds = this.timeElapsed % 60;
+                    this.timerDisplay.textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            endGame() {
+                clearInterval(this.timer);
+                setTimeout(() => {
+                    alert(`Congratulations! You won in ${this.moves} moves and ${this.timeElapsed} seconds!`);
+                }, 500);
+            }
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Start the game
+        new FlipMatchGame();
+    </script>
+</body>
+</html>
