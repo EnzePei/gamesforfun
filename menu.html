@@ -50,8 +50,8 @@
         .container {
             position: relative;
             padding: 20px;
-            max-width: 800px;
             width: 100%;
+            max-width: 1200px;
         }
 
         .title {
@@ -64,9 +64,11 @@
 
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .game-card {
@@ -81,6 +83,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            min-height: 200px;
+            width: 100%;
         }
 
         .game-card:hover {
@@ -151,6 +155,18 @@
             width: 20px;
             height: 20px;
             fill: var(--text);
+        }
+
+        @media (max-width: 900px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -223,6 +239,61 @@
                 </div>
                 <h2 class="game-title">Space Shooter</h2>
                 <p class="game-description">Pilot your ship and shoot down various enemy shapes</p>
+            </a>
+
+            <a href="flip.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <rect x="4" y="4" width="7" height="7" rx="1"/>
+                        <rect x="13" y="4" width="7" height="7" rx="1"/>
+                        <rect x="4" y="13" width="7" height="7" rx="1"/>
+                        <rect x="13" y="13" width="7" height="7" rx="1"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Flip</h2>
+                <p class="game-description">Memory game with cards to match and remember patterns</p>
+            </a>
+        
+            <a href="tic-tac-toe.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 7L11 11M11 7L7 11" 
+                              stroke="currentColor" 
+                              stroke-width="2" 
+                              stroke-linecap="round"
+                              fill="none"/>
+                        <circle cx="17" cy="9" r="2.5" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                fill="none"/>
+                        <circle cx="9" cy="17" r="2.5" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                fill="none"/>
+                        <path d="M15 15L19 19M19 15L15 19" 
+                              stroke="currentColor" 
+                              stroke-width="2" 
+                              stroke-linecap="round"
+                              fill="none"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Tic-tac-toe</h2>
+                <p class="game-description">Classic X's and O's game with AI opponent</p>
+            </a>
+        
+            <a href="snake.html" class="game-card">
+                <div class="game-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M17 4v4h-4v4H9v4H5v4" 
+                              stroke="currentColor" 
+                              stroke-width="2" 
+                              stroke-linecap="round"
+                              fill="none"/>
+                        <circle cx="17" cy="4" r="2" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h2 class="game-title">Snake</h2>
+                <p class="game-description">Classic snake game with peaceful and classic modes</p>
             </a>
         </div>
     </div>
