@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #1d1d1f;
+            --surface: #fbfbfd;
+            --cell-bg: #ffffff;
+            --border: #e5e5e7;
+            --x-color: #ff3b30;
+            --o-color: #007aff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --hover: #f5f5f7;
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #f5f5f7;
+            --surface: #1d1d1f;
+            --cell-bg: #2c2c2e;
+            --border: #3a3a3c;
+            --x-color: #ff453a;
+            --o-color: #0a84ff;
+            --shadow: rgba(255, 255, 255, 0.05);
+            --hover: #3a3a3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .game-status {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            height: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: var(--cell-bg);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 2.5rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            position: relative;
+        }
+
+        .cell:hover:not(.marked) {
+            background: var(--hover);
+        }
+
+        .cell.x {
+            color: var(--x-color);
+        }
+
+        .cell.o {
+            color: var(--o-color);
+        }
+
+        .cell.marked {
+            cursor: not-allowed;
+        }
+
+        .cell.win {
+            animation: win 1s ease infinite;
+        }
+
+        @keyframes win {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text);
+            padding: 0.5rem;
+        }
+
+        .reset-btn {
+            margin-top: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .player-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5em;
+            height: 1.5em;
+        }
+
+        .player-icon.x {
+            color: var(--x-color);
+        }
+
+        .player-icon.o {
+            color: var(--o-color);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="lightIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg id="darkIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <h1 class="game-title">Tic Tac Toe</h1>
+    <div class="game-status" id="status"></div>
+    
+    <div class="game-board" id="board"></div>
+    <button class="reset-btn" id="resetBtn">New Game</button>
+
+    <script>
+        class TicTacToe {
+            constructor() {
+                this.board = document.getElementById('board');
+                this.status = document.getElementById('status');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.currentPlayer = 'x';
+                this.gameBoard = Array(9).fill('');
+                this.gameActive = true;
+
+                this.createBoard();
+                this.updateStatus();
+                this.resetBtn.addEventListener('click', () => this.resetGame());
+            }
+
+            createBoard() {
+                this.board.innerHTML = '';
+                for (let i = 0; i < 9; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.index = i;
+                    cell.addEventListener('click', () => this.handleCellClick(cell));
+                    this.board.appendChild(cell);
+                }
+            }
+
+            handleCellClick(cell) {
+                const index = cell.dataset.index;
+                if (this.gameBoard[index] || !this.gameActive) return;
+
+                this.gameBoard[index] = this.currentPlayer;
+                cell.classList.add(this.currentPlayer, 'marked');
+                cell.textContent = this.currentPlayer.toUpperCase();
+
+                if (this.checkWin()) {
+                    this.handleWin();
+                } else if (this.checkDraw()) {
+                    this.handleDraw();
+                } else {
+                    this.currentPlayer = this.currentPlayer === 'x' ? 'o' : 'x';
+                    this.updateStatus();
+                }
+            }
+
+            checkWin() {
+                const winPatterns = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                    [0, 4, 8], [2, 4, 6] // Diagonals
+                ];
+
+                return winPatterns.some(pattern => {
+                    const [a, b, c] = pattern;
+                    if (
+                        this.gameBoard[a] &&
+                        this.gameBoard[a] === this.gameBoard[b] &&
+                        this.gameBoard[a] === this.gameBoard[c]
+                    ) {
+                        // Add winning animation
+                        pattern.forEach(index => {
+                            this.board.children[index].classList.add('win');
+                        });
+                        return true;
+                    }
+                    return false;
+                });
+            }
+
+            checkDraw() {
+                return this.gameBoard.every(cell => cell);
+            }
+
+            handleWin() {
+                this.gameActive = false;
+                this.status.innerHTML = `
+                    Player <span class="player-icon ${this.currentPlayer}">${this.currentPlayer.toUpperCase()}</span> wins!
+                `;
+            }
+
+            handleDraw() {
+                this.gameActive = false;
+                this.status.textContent = "It's a draw!";
+            }
+
+            updateStatus() {
+                this.status.innerHTML = `
+                    Player <span class="player-icon ${this.currentPlayer}">${this.currentPlayer.toUpperCase()}</span>'s turn
+                `;
+            }
+
+            resetGame() {
+                this.gameBoard = Array(9).fill('');
+                this.currentPlayer = 'x';
+                this.gameActive = true;
+                this.createBoard();
+                this.updateStatus();
+            }
+        }
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const lightIcon = document.getElementById('lightIcon');
+        const darkIcon = document.getElementById('darkIcon');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+            darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+            
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+        darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Start the game
+        new TicTacToe();
+    </script>
+</body>
+</html>
