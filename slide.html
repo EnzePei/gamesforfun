@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root[data-theme="light"] {
+            --background: #ffffff;
+            --text: #000000;
+            --text-secondary: #86868b;
+            --surface: #fafafa;
+            --grid: #f0f0f0;
+            --highlight: rgba(0, 0, 0, 0.1);
+            --found-word: #4CAF50;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        :root[data-theme="dark"] {
+            --background: #000000;
+            --text: #ffffff;
+            --text-secondary: #86868b;
+            --surface: #111111;
+            --grid: #222222;
+            --highlight: rgba(255, 255, 255, 0.1);
+            --found-word: #81C784;
+            --shadow: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .game-header {
+            width: 100%;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .board-container {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            width: 400px;
+            height: 400px;
+            background: var(--grid);
+            padding: 8px;
+            border-radius: 1rem;
+        }
+
+        .tile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .tile:hover {
+            background: var(--highlight);
+        }
+
+        .tile.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .win-message {
+            color: var(--found-word);
+            font-size: 1.25rem;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .win-message.visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .board {
+                width: 320px;
+                height: 320px;
+            }
+
+            .tile {
+                font-size: 1.25rem;
+            }
+        }
+      </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg id="lightIcon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg id="darkIcon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">Sliding Puzzle</h1>
+            <div class="game-info">
+                <div>Moves: <span id="moves">0</span></div>
+                <div>Time: <span id="timer">00:00</span></div>
+            </div>
+        </div>
+
+        <div class="board-container">
+            <div class="board" id="board"></div>
+        </div>
+
+        <div class="game-controls">
+            <button class="btn" onclick="initializeGame()">New Game</button>
+        </div>
+
+        <div id="winMessage" class="win-message"></div>
+    </div>
+
+  <script>
+    let board = [];
+    let moves = 0;
+    let isWon = false;
+
+    function createBoard() {
+      const boardElement = document.getElementById('board');
+      boardElement.innerHTML = '';
+      
+      board.forEach((number, index) => {
+        const tile = document.createElement('button');
+        tile.className = `tile ${number === null ? 'empty' : ''}`;
+        tile.textContent = number || '';
+        tile.onclick = () => handleTileClick(index);
+        boardElement.appendChild(tile);
+      });
+    }
+
+    function initializeGame() {
+      // Create array 1-15 plus null
+      board = Array.from({ length: 15 }, (_, i) => i + 1);
+      board.push(null);
+      
+      // Shuffle board (ensuring it's solvable)
+      do {
+        board.sort(() => Math.random() - 0.5);
+      } while (!isSolvable(board));
+      
+      moves = 0;
+      isWon = false;
+      document.getElementById('moves').textContent = moves;
+      document.getElementById('winMessage').textContent = '';
+      createBoard();
+    }
+
+    function isSolvable(puzzle) {
+      let inversions = 0;
+      const puzzleWithoutNull = puzzle.filter(num => num !== null);
+      
+      for (let i = 0; i < puzzleWithoutNull.length - 1; i++) {
+        for (let j = i + 1; j < puzzleWithoutNull.length; j++) {
+          if (puzzleWithoutNull[i] > puzzleWithoutNull[j]) {
+            inversions++;
+          }
+        }
+      }
+      
+      const emptyIndex = puzzle.indexOf(null);
+      const emptyRowFromBottom = 4 - Math.floor(emptyIndex / 4);
+      
+      return emptyRowFromBottom % 2 === 0 ? inversions % 2 === 1 : inversions % 2 === 0;
+    }
+
+    function isAdjacent(pos1, pos2) {
+      const row1 = Math.floor(pos1 / 4);
+      const col1 = pos1 % 4;
+      const row2 = Math.floor(pos2 / 4);
+      const col2 = pos2 % 4;
+      
+      return Math.abs(row1 - row2) + Math.abs(col1 - col2) === 1;
+    }
+
+    function checkWin() {
+      for (let i = 0; i < board.length - 1; i++) {
+        if (board[i] !== i + 1) return false;
+      }
+      return board[board.length - 1] === null;
+    }
+
+    function handleTileClick(index) {
+      if (isWon) return;
+      
+      const emptyIndex = board.indexOf(null);
+      if (!isAdjacent(index, emptyIndex)) return;
+      
+      // Swap tiles
+      [board[index], board[emptyIndex]] = [board[emptyIndex], board[index]];
+      moves++;
+      document.getElementById('moves').textContent = moves;
+      
+      createBoard();
+      
+      if (checkWin()) {
+        isWon = true;
+        document.getElementById('winMessage').textContent = 'Congratulations! You won!';
+      }
+    }
+
+    let timerInterval;
+    let seconds = 0;
+
+    function initializeGame() {
+      // Reset timer
+      clearInterval(timerInterval);
+      seconds = 0;
+      updateTimer();
+      startTimer();
+
+      // Previous initialization code
+      board = Array.from({ length: 15 }, (_, i) => i + 1);
+      board.push(null);
+      
+      do {
+        board.sort(() => Math.random() - 0.5);
+      } while (!isSolvable(board));
+      
+      moves = 0;
+      isWon = false;
+      document.getElementById('moves').textContent = moves;
+      document.getElementById('winMessage').textContent = '';
+      createBoard();
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        seconds++;
+        updateTimer();
+      }, 1000);
+    }
+
+    function updateTimer() {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      document.getElementById('timer').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    function handleTileClick(index) {
+      if (isWon) return;
+      
+      const emptyIndex = board.indexOf(null);
+      if (!isAdjacent(index, emptyIndex)) return;
+      
+      [board[index], board[emptyIndex]] = [board[emptyIndex], board[index]];
+      moves++;
+      document.getElementById('moves').textContent = moves;
+      
+      createBoard();
+      
+      if (checkWin()) {
+        isWon = true;
+        clearInterval(timerInterval);
+        document.getElementById('winMessage').textContent = 
+          `Congratulations! You won in ${moves} moves and ${formatTime(seconds)}!`;
+      }
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const lightIcon = document.getElementById('lightIcon');
+    const darkIcon = document.getElementById('darkIcon');
+    const html = document.documentElement;
+
+    function toggleTheme() {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      html.setAttribute('data-theme', newTheme);
+      lightIcon.style.display = newTheme === 'light' ? 'block' : 'none';
+      darkIcon.style.display = newTheme === 'dark' ? 'block' : 'none';
+      localStorage.setItem('theme', newTheme);
+    }
+
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    lightIcon.style.display = savedTheme === 'light' ? 'block' : 'none';
+    darkIcon.style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Start game on load
+    window.onload = initializeGame;
+  </script>
+</body>
+</html>
