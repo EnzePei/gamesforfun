@@ -155,6 +155,22 @@
         .player-icon.o {
             color: var(--o-color);
         }
+
+        .mode-toggle {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            color: var(--text);
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .mode-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
     </style>
 </head>
 <body>
@@ -170,7 +186,10 @@
 
     <h1 class="game-title">Tic Tac Toe</h1>
     <div class="game-status" id="status"></div>
-    
+
+    <!-- Mode Toggle Button -->
+    <button class="mode-toggle" id="modeToggle">PvP Mode</button>
+
     <div class="game-board" id="board"></div>
     <button class="reset-btn" id="resetBtn">New Game</button>
 
@@ -180,13 +199,23 @@
                 this.board = document.getElementById('board');
                 this.status = document.getElementById('status');
                 this.resetBtn = document.getElementById('resetBtn');
+                this.modeToggle = document.getElementById('modeToggle');
                 this.currentPlayer = 'x';
                 this.gameBoard = Array(9).fill('');
                 this.gameActive = true;
+                this.isPvB = false; // Flag for PvP vs PvB mode
 
                 this.createBoard();
                 this.updateStatus();
+
+                this.modeToggle.addEventListener('click', () => this.toggleMode());
                 this.resetBtn.addEventListener('click', () => this.resetGame());
+            }
+
+            toggleMode() {
+                this.isPvB = !this.isPvB;
+                this.modeToggle.textContent = this.isPvB ? "Bot Mode" : "PvP Mode";
+                this.resetGame();
             }
 
             createBoard() {
@@ -215,6 +244,9 @@
                 } else {
                     this.currentPlayer = this.currentPlayer === 'x' ? 'o' : 'x';
                     this.updateStatus();
+                    if (this.isPvB && this.currentPlayer === 'o') {
+                        this.botMove();
+                    }
                 }
             }
 
@@ -232,7 +264,6 @@
                         this.gameBoard[a] === this.gameBoard[b] &&
                         this.gameBoard[a] === this.gameBoard[c]
                     ) {
-                        // Add winning animation
                         pattern.forEach(index => {
                             this.board.children[index].classList.add('win');
                         });
@@ -264,12 +295,34 @@
                 `;
             }
 
+            botMove() {
+                setTimeout(() => {
+                    const availableCells = this.gameBoard.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+                    const randomMove = availableCells[Math.floor(Math.random() * availableCells.length)];
+                    this.gameBoard[randomMove] = 'o';
+                    this.board.children[randomMove].classList.add('o', 'marked');
+                    this.board.children[randomMove].textContent = 'O';
+
+                    if (this.checkWin()) {
+                        this.handleWin();
+                    } else if (this.checkDraw()) {
+                        this.handleDraw();
+                    } else {
+                        this.currentPlayer = 'x';
+                        this.updateStatus();
+                    }
+                }, 1000); // Simulate a short delay for the bot
+            }
+
             resetGame() {
                 this.gameBoard = Array(9).fill('');
                 this.currentPlayer = 'x';
                 this.gameActive = true;
                 this.createBoard();
                 this.updateStatus();
+                if (this.isPvB && this.currentPlayer === 'o') {
+                    this.botMove();
+                }
             }
         }
 
