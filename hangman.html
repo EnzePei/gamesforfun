@@ -306,10 +306,23 @@
             remainingTries = MAX_TRIES;
             gameOver = false;
 
+            const display = document.getElementById('word-display');
+            display.innerHTML = ''; // Clear the existing letters
+
             document.getElementById('message').textContent = 'Guess the word!';
             createKeyboard();
             updateWordDisplay();
             initializeHangman();
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous hangman drawing
+
+            // Redraw gallows
+            drawGallows(ctx);
+
+            // Reset message and keyboard
+            document.getElementById('message').textContent = 'Guess the word!';
+            createKeyboard();
+            updateWordDisplay();
         }
 
         function initializeHangman() {
@@ -386,6 +399,36 @@
                     ctx.stroke();
                     break;
             }
+        }
+
+        function updateWordDisplay() {
+            const display = document.getElementById('word-display');
+            const existingSpaces = Array.from(display.children);
+            
+            // If it's the first time, create all letter spaces
+            if (existingSpaces.length === 0) {
+                [...currentWord].forEach((letter, index) => {
+                    const letterSpace = document.createElement('div');
+                    letterSpace.className = 'letter-space';
+                    letterSpace.classList.add('visible');
+                    
+                    if (guessedLetters.has(letter)) {
+                        letterSpace.textContent = letter;
+                    }
+                    
+                    display.appendChild(letterSpace);
+                });
+                return;
+            }
+
+            // Otherwise, just update the revealed letters with animation
+            [...currentWord].forEach((letter, index) => {
+                if (guessedLetters.has(letter) && !existingSpaces[index].textContent) {
+                    const letterSpace = existingSpaces[index];
+                    letterSpace.textContent = letter;
+                    letterSpace.classList.add('reveal');
+                }
+            });
         }
 
         function handleGuess(letter) {
