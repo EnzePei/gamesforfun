@@ -1,0 +1,986 @@
+[
+    {
+        "question": "What is the largest organ in the human body?",
+        "choices": ["Brain", "Liver", "Skin", "Heart"],
+        "correctAnswer": "Skin"
+      },
+      {
+        "question": "Which planet is known as the Red Planet?",
+        "choices": ["Venus", "Mars", "Jupiter", "Mercury"],
+        "correctAnswer": "Mars"
+      },
+      {
+        "question": "Who wrote 'Romeo and Juliet'?",
+        "choices": ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+        "correctAnswer": "William Shakespeare"
+      },
+      {
+        "question": "What is the chemical symbol for gold?",
+        "choices": ["Ag", "Fe", "Au", "Cu"],
+        "correctAnswer": "Au"
+      },
+      {
+        "question": "Which country is home to the kangaroo?",
+        "choices": ["New Zealand", "South Africa", "Australia", "Brazil"],
+        "correctAnswer": "Australia"
+      },
+      {
+        "question": "What is the smallest prime number?",
+        "choices": ["0", "1", "2", "3"],
+        "correctAnswer": "2"
+      },
+      {
+        "question": "Who painted 'The Starry Night'?",
+        "choices": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+        "correctAnswer": "Vincent van Gogh"
+      },
+      {
+        "question": "What is the capital of China?",
+        "choices": ["Shanghai", "Beijing", "Hong Kong", "Seoul"],
+        "correctAnswer": "Beijing"
+      },
+      {
+        "question": "Which element is most abundant in Earth's atmosphere?",
+        "choices": ["Oxygen", "Carbon", "Nitrogen", "Hydrogen"],
+        "correctAnswer": "Nitrogen"
+      },
+      {
+        "question": "Who was the first person to walk on the moon?",
+        "choices": ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "John Glenn"],
+        "correctAnswer": "Neil Armstrong"
+      },
+      {
+        "question": "What is the fastest land animal?",
+        "choices": ["Lion", "Cheetah", "Gazelle", "Leopard"],
+        "correctAnswer": "Cheetah"
+      },
+      {
+        "question": "Which ocean is the largest?",
+        "choices": ["Atlantic", "Indian", "Arctic", "Pacific"],
+        "correctAnswer": "Pacific"
+      },
+      {
+        "question": "What is the capital of Brazil?",
+        "choices": ["Rio de Janeiro", "São Paulo", "Brasília", "Salvador"],
+        "correctAnswer": "Brasília"
+      },
+      {
+        "question": "Who invented the telephone?",
+        "choices": ["Thomas Edison", "Alexander Graham Bell", "Nikola Tesla", "George Eastman"],
+        "correctAnswer": "Alexander Graham Bell"
+      },
+      {
+        "question": "What is the hardest natural substance?",
+        "choices": ["Gold", "Iron", "Diamond", "Platinum"],
+        "correctAnswer": "Diamond"
+      },
+      {
+        "question": "Which planet has the most moons?",
+        "choices": ["Jupiter", "Saturn", "Uranus", "Neptune"],
+        "correctAnswer": "Saturn"
+      },
+      {
+        "question": "What is the main component of the Sun?",
+        "choices": ["Helium", "Oxygen", "Hydrogen", "Nitrogen"],
+        "correctAnswer": "Hydrogen"
+      },
+      {
+        "question": "Who wrote '1984'?",
+        "choices": ["George Orwell", "Aldous Huxley", "Ray Bradbury", "H.G. Wells"],
+        "correctAnswer": "George Orwell"
+      },
+      {
+        "question": "What is the longest river in the world?",
+        "choices": ["Amazon", "Nile", "Yangtze", "Mississippi"],
+        "correctAnswer": "Nile"
+      },
+      {
+        "question": "Which year did World War II end?",
+        "choices": ["1943", "1944", "1945", "1946"],
+        "correctAnswer": "1945"
+      },
+      {
+        "question": "What is the capital of Russia?",
+        "choices": ["St. Petersburg", "Kiev", "Moscow", "Minsk"],
+        "correctAnswer": "Moscow"
+      },
+      {
+        "question": "Who painted the Sistine Chapel ceiling?",
+        "choices": ["Leonardo da Vinci", "Michelangelo", "Raphael", "Donatello"],
+        "correctAnswer": "Michelangelo"
+      },
+      {
+        "question": "What is the chemical symbol for silver?",
+        "choices": ["Si", "Ag", "Au", "Fe"],
+        "correctAnswer": "Ag"
+      },
+      {
+        "question": "Which continent is the largest?",
+        "choices": ["North America", "Africa", "Asia", "Antarctica"],
+        "correctAnswer": "Asia"
+      },
+      {
+        "question": "What is the speed of light?",
+        "choices": ["299,792 km/s", "199,792 km/s", "399,792 km/s", "499,792 km/s"],
+        "correctAnswer": "299,792 km/s"
+      },
+      {
+        "question": "Who is known as the father of computer science?",
+        "choices": ["Alan Turing", "Bill Gates", "Steve Jobs", "Charles Babbage"],
+        "correctAnswer": "Alan Turing"
+      },
+      {
+        "question": "What is the largest species of shark?",
+        "choices": ["Great White", "Whale Shark", "Tiger Shark", "Hammerhead"],
+        "correctAnswer": "Whale Shark"
+      },
+      {
+        "question": "Which country invented pizza?",
+        "choices": ["Greece", "France", "Italy", "Spain"],
+        "correctAnswer": "Italy"
+      },
+      {
+        "question": "What is the smallest country in the world?",
+        "choices": ["Monaco", "Vatican City", "San Marino", "Liechtenstein"],
+        "correctAnswer": "Vatican City"
+      },
+      {
+        "question": "Who discovered penicillin?",
+        "choices": ["Alexander Fleming", "Louis Pasteur", "Robert Koch", "Joseph Lister"],
+        "correctAnswer": "Alexander Fleming"
+      },
+      {
+        "question": "What is the main language spoken in Brazil?",
+        "choices": ["Spanish", "English", "Portuguese", "French"],
+        "correctAnswer": "Portuguese"
+      },
+      {
+        "question": "Which animal can live the longest?",
+        "choices": ["Tortoise", "Elephant", "Bowhead Whale", "Greenland Shark"],
+        "correctAnswer": "Greenland Shark"
+      },
+      {
+        "question": "What is the chemical formula for water?",
+        "choices": ["CO2", "H2O", "O2", "NaCl"],
+        "correctAnswer": "H2O"
+      },
+      {
+        "question": "Who painted 'The Last Supper'?",
+        "choices": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Botticelli"],
+        "correctAnswer": "Leonardo da Vinci"
+      },
+      {
+        "question": "Which country is home to the Great Barrier Reef?",
+        "choices": ["New Zealand", "Indonesia", "Australia", "Philippines"],
+        "correctAnswer": "Australia"
+      },
+      {
+        "question": "What is the largest desert in the world?",
+        "choices": ["Sahara", "Antarctic", "Arctic", "Gobi"],
+        "correctAnswer": "Antarctic"
+      },
+      {
+        "question": "Who developed the theory of relativity?",
+        "choices": ["Isaac Newton", "Albert Einstein", "Stephen Hawking", "Niels Bohr"],
+        "correctAnswer": "Albert Einstein"
+      },
+      {
+        "question": "What is the capital of India?",
+        "choices": ["Mumbai", "New Delhi", "Bangalore", "Kolkata"],
+        "correctAnswer": "New Delhi"
+      },
+      {
+        "question": "Which planet is closest to the Sun?",
+        "choices": ["Venus", "Mars", "Mercury", "Earth"],
+        "correctAnswer": "Mercury"
+      },
+      {
+        "question": "Who wrote 'The Great Gatsby'?",
+        "choices": ["Ernest Hemingway", "F. Scott Fitzgerald", "John Steinbeck", "Virginia Woolf"],
+        "correctAnswer": "F. Scott Fitzgerald"
+      },
+      {
+        "question": "What is the official language of Japan?",
+        "choices": ["Korean", "Mandarin", "Japanese", "Cantonese"],
+        "correctAnswer": "Japanese"
+      },
+      {
+        "question": "Which element has the atomic number 1?",
+        "choices": ["Helium", "Hydrogen", "Carbon", "Oxygen"],
+        "correctAnswer": "Hydrogen"
+      },
+      {
+        "question": "What is the currency of the United Kingdom?",
+        "choices": ["Euro", "Dollar", "Pound Sterling", "Franc"],
+        "correctAnswer": "Pound Sterling"
+      },
+      {
+        "question": "Who discovered gravity?",
+        "choices": ["Galileo Galilei", "Isaac Newton", "Albert Einstein", "Johannes Kepler"],
+        "correctAnswer": "Isaac Newton"
+      },
+      {
+        "question": "What is the tallest mountain in the world?",
+        "choices": ["K2", "Mount Everest", "Mount Kilimanjaro", "Mount McKinley"],
+        "correctAnswer": "Mount Everest"
+      },
+      {
+        "question": "Which blood type is known as the universal donor?",
+        "choices": ["A+", "B+", "AB+", "O-"],
+        "correctAnswer": "O-"
+      },
+      {
+        "question": "What is the largest mammal in the world?",
+        "choices": ["African Elephant", "Blue Whale", "White Rhinoceros", "Giraffe"],
+        "correctAnswer": "Blue Whale"
+      },
+      {
+        "question": "Who invented the World Wide Web?",
+        "choices": ["Bill Gates", "Steve Jobs", "Tim Berners-Lee", "Mark Zuckerberg"],
+        "correctAnswer": "Tim Berners-Lee"
+      },
+      {
+        "question": "What is the smallest planet in our solar system?",
+        "choices": ["Mars", "Mercury", "Pluto", "Venus"],
+        "correctAnswer": "Mercury"
+      },
+      {
+        "question": "Which is the most populous country in the world?",
+        "choices": ["India", "China", "USA", "Indonesia"],
+        "correctAnswer": "China"
+      },
+      {
+        "question": "What is the chemical symbol for iron?",
+        "choices": ["Ir", "Fe", "In", "I"],
+        "correctAnswer": "Fe"
+      },
+      {
+        "question": "Who is known as the 'Queen of Pop'?",
+        "choices": ["Lady Gaga", "Madonna", "Beyoncé", "Ariana Grande"],
+        "correctAnswer": "Madonna"
+      },
+      {
+        "question": "Which video game features a character named 'Link'?",
+        "choices": ["Super Mario", "The Legend of Zelda", "Final Fantasy", "Halo"],
+        "correctAnswer": "The Legend of Zelda"
+      },
+      {
+        "question": "In which sport is the 'Super Bowl' played?",
+        "choices": ["Basketball", "Baseball", "Soccer", "American Football"],
+        "correctAnswer": "American Football"
+      },
+      {
+        "question": "What is the title of Billie Eilish's debut album?",
+        "choices": ["Happier Than Ever", "When We All Fall Asleep, Where Do We Go?", "Bad Guy", "Don't Smile at Me"],
+        "correctAnswer": "When We All Fall Asleep, Where Do We Go?"
+      },
+      {
+        "question": "Who won the 2020 NBA MVP award?",
+        "choices": ["LeBron James", "Stephen Curry", "Giannis Antetokounmpo", "Kevin Durant"],
+        "correctAnswer": "Giannis Antetokounmpo"
+      },
+      {
+        "question": "Which pop star performed the song 'Blinding Lights'?",
+        "choices": ["Post Malone", "The Weeknd", "Drake", "Travis Scott"],
+        "correctAnswer": "The Weeknd"
+      },
+      {
+        "question": "In which video game series would you find the character 'Mario'?",
+        "choices": ["Super Mario", "Grand Theft Auto", "Call of Duty", "Minecraft"],
+        "correctAnswer": "Super Mario"
+      },
+      {
+        "question": "Who holds the record for the most goals in a single World Cup?",
+        "choices": ["Marta", "Cristiano Ronaldo", "Lionel Messi", "Miroslav Klose"],
+        "correctAnswer": "Marta"
+      },
+      {
+        "question": "Which artist sang the hit song 'Shape of You'?",
+        "choices": ["Ed Sheeran", "Justin Bieber", "Shawn Mendes", "Harry Styles"],
+        "correctAnswer": "Ed Sheeran"
+      },
+      {
+        "question": "What is the highest-selling video game of all time?",
+        "choices": ["Minecraft", "Fortnite", "Grand Theft Auto V", "Tetris"],
+        "correctAnswer": "Minecraft"
+      },
+      {
+        "question": "Who won the 2018 FIFA World Cup?",
+        "choices": ["Brazil", "France", "Germany", "Argentina"],
+        "correctAnswer": "France"
+      },
+      {
+        "question": "What song did Michael Jackson release in 1982 that became one of his most iconic?",
+        "choices": ["Thriller", "Beat It", "Billie Jean", "Smooth Criminal"],
+        "correctAnswer": "Billie Jean"
+      },
+      {
+        "question": "Which character is the main protagonist in 'Fortnite'?",
+        "choices": ["Jonesy", "Ninja", "Lara Croft", "Mario"],
+        "correctAnswer": "Jonesy"
+      },
+      {
+        "question": "Which country is home to the famous tennis player Rafael Nadal?",
+        "choices": ["Spain", "France", "Argentina", "United States"],
+        "correctAnswer": "Spain"
+      },
+      {
+        "question": "What pop group released 'Wannabe' in 1996?",
+        "choices": ["Destiny's Child", "Spice Girls", "Backstreet Boys", "NSYNC"],
+        "correctAnswer": "Spice Girls"
+      },
+      {
+        "question": "In what year did the game 'Pokémon Go' launch?",
+        "choices": ["2015", "2016", "2017", "2018"],
+        "correctAnswer": "2016"
+      },
+      {
+        "question": "Who won the 2020 UEFA Champions League?",
+        "choices": ["Barcelona", "Bayern Munich", "Paris Saint-Germain", "Real Madrid"],
+        "correctAnswer": "Bayern Munich"
+      },
+      {
+        "question": "Which pop singer is known for the hit 'Poker Face'?",
+        "choices": ["Katy Perry", "Lady Gaga", "Rihanna", "Ariana Grande"],
+        "correctAnswer": "Lady Gaga"
+      },
+      {
+        "question": "What game features the famous character 'Pikachu'?",
+        "choices": ["Super Mario", "Pokémon", "Fortnite", "Minecraft"],
+        "correctAnswer": "Pokémon"
+      },
+      {
+        "question": "What is the name of the famous sports car racing game developed by Polyphony Digital?",
+        "choices": ["Need for Speed", "Gran Turismo", "Forza Horizon", "F1 Racing"],
+        "correctAnswer": "Gran Turismo"
+      },
+      {
+        "question": "What sport is Lionel Messi famous for?",
+        "choices": ["Basketball", "Tennis", "Soccer", "Golf"],
+        "correctAnswer": "Soccer"
+      },
+      {
+        "question": "Which singer performed 'Hips Don't Lie' in 2006?",
+        "choices": ["Beyoncé", "Shakira", "Alicia Keys", "Rihanna"],
+        "correctAnswer": "Shakira"
+      },
+      {
+        "question": "In what game do players need to survive and escape an island?",
+        "choices": ["Minecraft", "Fortnite", "PUBG", "The Last of Us"],
+        "correctAnswer": "Fortnite"
+      },
+      {
+        "question": "Which basketball player is known as 'King James'?",
+        "choices": ["LeBron James", "Kobe Bryant", "Michael Jordan", "Stephen Curry"],
+        "correctAnswer": "LeBron James"
+      },
+      {
+        "question": "Who performed the hit song 'Uptown Funk'?",
+        "choices": ["Ed Sheeran", "Mark Ronson featuring Bruno Mars", "Pharrell Williams", "Justin Timberlake"],
+        "correctAnswer": "Mark Ronson featuring Bruno Mars"
+      },
+      {
+        "question": "What video game franchise is known for its 'Wasteland' settings?",
+        "choices": ["The Elder Scrolls", "Fallout", "Borderlands", "Red Dead Redemption"],
+        "correctAnswer": "Fallout"
+      },
+      {
+        "question": "Which American football team won the 2021 Super Bowl?",
+        "choices": ["Kansas City Chiefs", "Green Bay Packers", "Tampa Bay Buccaneers", "San Francisco 49ers"],
+        "correctAnswer": "Tampa Bay Buccaneers"
+      },
+      {
+        "question": "Who sang 'Happy' in 2013?",
+        "choices": ["Pharrell Williams", "Justin Timberlake", "Usher", "Drake"],
+        "correctAnswer": "Pharrell Williams"
+      },
+      {
+        "question": "Which game lets players control a character named 'Kratos'?",
+        "choices": ["God of War", "Uncharted", "The Last of Us", "Halo"],
+        "correctAnswer": "God of War"
+      },
+      {
+        "question": "What sport is associated with Wimbledon?",
+        "choices": ["Tennis", "Cricket", "Football", "Golf"],
+        "correctAnswer": "Tennis"
+      },
+      {
+        "question": "Who is the artist behind the song 'Rolling in the Deep'?",
+        "choices": ["Adele", "Rihanna", "Beyoncé", "Lady Gaga"],
+        "correctAnswer": "Adele"
+      },
+      {
+        "question": "Which game series involves capturing wild creatures called 'Pokémon'?",
+        "choices": ["Pokémon", "Digimon", "Yu-Gi-Oh!", "Monster Hunter"],
+        "correctAnswer": "Pokémon"
+      },
+      {
+        "question": "Which NFL team is based in Green Bay, Wisconsin?",
+        "choices": ["Minnesota Vikings", "Green Bay Packers", "Chicago Bears", "Detroit Lions"],
+        "correctAnswer": "Green Bay Packers"
+      },
+      {
+        "question": "What pop star is known for 'Vogue' and 'Like a Virgin'?",
+        "choices": ["Lady Gaga", "Madonna", "Beyoncé", "Ariana Grande"],
+        "correctAnswer": "Madonna"
+      },
+      {
+        "question": "Which character does Sonic compete against in 'Sonic the Hedgehog'?",
+        "choices": ["Shadow", "Knuckles", "Eggman", "Tails"],
+        "correctAnswer": "Eggman"
+      },
+      {
+        "question": "What is the tallest building in the world?",
+        "choices": ["Eiffel Tower", "Burj Khalifa", "Empire State Building", "Shanghai Tower"],
+        "correctAnswer": "Burj Khalifa"
+      },
+      {
+        "question": "What is the primary gas found in Earth's atmosphere?",
+        "choices": ["Oxygen", "Nitrogen", "Carbon Dioxide", "Argon"],
+        "correctAnswer": "Nitrogen"
+      },
+      {
+        "question": "Who is the author of 'Harry Potter'?",
+        "choices": ["J.R.R. Tolkien", "George R.R. Martin", "J.K. Rowling", "C.S. Lewis"],
+        "correctAnswer": "J.K. Rowling"
+      },
+      {
+        "question": "Which continent is the Sahara Desert located on?",
+        "choices": ["Asia", "Africa", "Australia", "North America"],
+        "correctAnswer": "Africa"
+      },
+      {
+        "question": "What is the capital of Italy?",
+        "choices": ["Milan", "Rome", "Venice", "Florence"],
+        "correctAnswer": "Rome"
+      },
+      {
+        "question": "Which gas do plants absorb from the atmosphere?",
+        "choices": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+        "correctAnswer": "Carbon Dioxide"
+      },
+      {
+        "question": "Which city is known as the Big Apple?",
+        "choices": ["Los Angeles", "Chicago", "New York City", "San Francisco"],
+        "correctAnswer": "New York City"
+      },
+      {
+        "question": "What is the largest continent by area?",
+        "choices": ["Europe", "Africa", "Asia", "Australia"],
+        "correctAnswer": "Asia"
+      },
+      {
+        "question": "Who painted the 'Mona Lisa'?",
+        "choices": ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+        "correctAnswer": "Leonardo da Vinci"
+      },
+      {
+        "question": "Which animal is known for having a black and white striped body?",
+        "choices": ["Lion", "Zebra", "Giraffe", "Elephant"],
+        "correctAnswer": "Zebra"
+      },
+      {
+        "question": "Which of these countries is in South America?",
+        "choices": ["China", "India", "Brazil", "Germany"],
+        "correctAnswer": "Brazil"
+      },
+      {
+        "question": "What does the acronym 'HTTP' stand for?",
+        "choices": ["HyperText Transfer Protocol", "HighText Transfer Protocol", "HyperText Technical Protocol", "HighText Technical Protocol"],
+        "correctAnswer": "HyperText Transfer Protocol"
+      },
+      {
+        "question": "Who was the first female prime minister of the United Kingdom?",
+        "choices": ["Margaret Thatcher", "Theresa May", "Indira Gandhi", "Angela Merkel"],
+        "correctAnswer": "Margaret Thatcher"
+      },
+      {
+        "question": "What is the hardest rock in the world?",
+        "choices": ["Granite", "Diamond", "Marble", "Basalt"],
+        "correctAnswer": "Diamond"
+      },
+      {
+        "question": "Which of these animals is known to hibernate?",
+        "choices": ["Bear", "Lion", "Elephant", "Kangaroo"],
+        "correctAnswer": "Bear"
+      },
+      {
+        "question": "What is the main ingredient in guacamole?",
+        "choices": ["Tomato", "Avocado", "Onion", "Lemon"],
+        "correctAnswer": "Avocado"
+      },
+      {
+        "question": "Who was the first woman to fly solo across the Atlantic Ocean?",
+        "choices": ["Amelia Earhart", "Harriet Quimby", "Bessie Coleman", "Jacqueline Cochran"],
+        "correctAnswer": "Amelia Earhart"
+      },
+      {
+        "question": "What is the capital of Canada?",
+        "choices": ["Toronto", "Vancouver", "Ottawa", "Montreal"],
+        "correctAnswer": "Ottawa"
+      },
+      {
+        "question": "What is the largest country in the world by area?",
+        "choices": ["United States", "China", "Canada", "Russia"],
+        "correctAnswer": "Russia"
+      },
+      {
+        "question": "Which fruit is known as the 'king of fruits'?",
+        "choices": ["Durian", "Mango", "Banana", "Pineapple"],
+        "correctAnswer": "Durian"
+      },
+      {
+        "question": "Which of the following is NOT a primary color?",
+        "choices": ["Red", "Blue", "Yellow", "Green"],
+        "correctAnswer": "Green"
+      },
+      {
+        "question": "Which instrument is used to measure temperature?",
+        "choices": ["Thermometer", "Barometer", "Anemometer", "Altimeter"],
+        "correctAnswer": "Thermometer"
+      },
+      {
+        "question": "What is the main source of energy for the Earth?",
+        "choices": ["The Moon", "The Sun", "The Wind", "The Ocean"],
+        "correctAnswer": "The Sun"
+      },
+      {
+        "question": "What is the currency of Japan?",
+        "choices": ["Yuan", "Won", "Yen", "Ringgit"],
+        "correctAnswer": "Yen"
+      },
+      {
+        "question": "Which metal is liquid at room temperature?",
+        "choices": ["Mercury", "Gold", "Silver", "Iron"],
+        "correctAnswer": "Mercury"
+      },
+      {
+        "question": "Which programming language is known as the 'mother of all languages'?",
+        "choices": ["C", "Java", "Python", "Fortran"],
+        "correctAnswer": "Fortran"
+      },
+      {
+        "question": "Which company developed the first personal computer?",
+        "choices": ["IBM", "Apple", "Microsoft", "Compaq"],
+        "correctAnswer": "Apple"
+      },
+      {
+        "question": "What does 'HTTP' stand for in web addresses?",
+        "choices": ["HyperText Transfer Protocol", "HyperText Technical Protocol", "HighText Transfer Protocol", "HyperText Tool Protocol"],
+        "correctAnswer": "HyperText Transfer Protocol"
+      },
+      {
+        "question": "What does the acronym 'RAM' stand for?",
+        "choices": ["Random Access Memory", "Read Access Memory", "Rapid Access Memory", "Real-time Access Memory"],
+        "correctAnswer": "Random Access Memory"
+      },
+      {
+        "question": "Which computer operating system is developed by Microsoft?",
+        "choices": ["Windows", "Linux", "MacOS", "Android"],
+        "correctAnswer": "Windows"
+      },
+      {
+        "question": "Which programming language is primarily used for web development?",
+        "choices": ["Java", "C++", "HTML", "Swift"],
+        "correctAnswer": "HTML"
+      },
+      {
+        "question": "What is the capital of Spain?",
+        "choices": ["Barcelona", "Madrid", "Seville", "Valencia"],
+        "correctAnswer": "Madrid"
+      },
+      {
+        "question": "Which language is most widely spoken in the world?",
+        "choices": ["Spanish", "French", "Mandarin", "English"],
+        "correctAnswer": "Mandarin"
+      },
+      {
+        "question": "What does the word 'aeroplane' mean in English?",
+        "choices": ["Air vehicle", "Sky machine", "Flying car", "Ocean vessel"],
+        "correctAnswer": "Air vehicle"
+      },
+      {
+        "question": "Which language has the most letters in its alphabet?",
+        "choices": ["English", "Russian", "Greek", "Khmer"],
+        "correctAnswer": "Khmer"
+      },
+      {
+        "question": "Which food is traditionally eaten during Thanksgiving in the U.S.?",
+        "choices": ["Turkey", "Chicken", "Pork", "Beef"],
+        "correctAnswer": "Turkey"
+      },
+      {
+        "question": "What is the main ingredient in sushi?",
+        "choices": ["Rice", "Fish", "Seaweed", "Vegetables"],
+        "correctAnswer": "Rice"
+      },
+      {
+        "question": "Which fruit is known for having its seeds on the outside?",
+        "choices": ["Strawberry", "Blueberry", "Kiwi", "Orange"],
+        "correctAnswer": "Strawberry"
+      },
+      {
+        "question": "What type of food is 'sushi'?",
+        "choices": ["Rice-based", "Noodle-based", "Soup-based", "Vegetable-based"],
+        "correctAnswer": "Rice-based"
+      },
+      {
+        "question": "What is the main ingredient in guacamole?",
+        "choices": ["Tomato", "Avocado", "Onion", "Lime"],
+        "correctAnswer": "Avocado"
+      },
+      {
+        "question": "Which nut is commonly used to make peanut butter?",
+        "choices": ["Almond", "Cashew", "Peanut", "Walnut"],
+        "correctAnswer": "Peanut"
+      },
+      {
+        "question": "Which country is known for inventing pizza?",
+        "choices": ["France", "Italy", "Greece", "Spain"],
+        "correctAnswer": "Italy"
+      },
+      {
+        "question": "Which of these is a common Italian dish?",
+        "choices": ["Sushi", "Paella", "Pizza", "Burgers"],
+        "correctAnswer": "Pizza"
+      },
+      {
+        "question": "Which fruit is known for keeping doctors away when eaten daily?",
+        "choices": ["Apple", "Banana", "Orange", "Grape"],
+        "correctAnswer": "Apple"
+      },
+      {
+        "question": "Which type of pasta is shaped like little tubes?",
+        "choices": ["Spaghetti", "Penne", "Fusilli", "Farfalle"],
+        "correctAnswer": "Penne"
+      },
+      {
+        "question": "What type of cheese is used to make traditional French brie?",
+        "choices": ["Cow's milk", "Goat's milk", "Sheep's milk", "Buffalo's milk"],
+        "correctAnswer": "Cow's milk"
+      },
+      {
+        "question": "Which food is a common ingredient in a Caesar salad?",
+        "choices": ["Tomatoes", "Lettuce", "Potatoes", "Rice"],
+        "correctAnswer": "Lettuce"
+      },
+      {
+        "question": "Which country won the 2018 FIFA World Cup?",
+        "choices": ["Germany", "Brazil", "France", "Argentina"],
+        "correctAnswer": "France"
+      },
+      {
+        "question": "What is the maximum score possible in a single game of ten-pin bowling?",
+        "choices": ["200", "250", "300", "350"],
+        "correctAnswer": "300"
+      },
+      {
+        "question": "Which NBA player is known as 'King James'?",
+        "choices": ["Kobe Bryant", "Michael Jordan", "LeBron James", "Shaquille O'Neal"],
+        "correctAnswer": "LeBron James"
+      },
+      {
+        "question": "Which sport is associated with the Wimbledon tournament?",
+        "choices": ["Tennis", "Golf", "Boxing", "Football"],
+        "correctAnswer": "Tennis"
+      },
+      {
+        "question": "What is the national sport of Japan?",
+        "choices": ["Baseball", "Sumo Wrestling", "Soccer", "Judo"],
+        "correctAnswer": "Sumo Wrestling"
+      },
+      {
+        "question": "Which country hosted the 2016 Summer Olympics?",
+        "choices": ["China", "Brazil", "Russia", "Australia"],
+        "correctAnswer": "Brazil"
+      },
+      {
+        "question": "In which sport do players hit a shuttlecock over a net?",
+        "choices": ["Tennis", "Badminton", "Volleyball", "Ping Pong"],
+        "correctAnswer": "Badminton"
+      },
+      {
+        "question": "How many players are on a soccer team on the field at one time?",
+        "choices": ["9", "10", "11", "12"],
+        "correctAnswer": "11"
+      },
+      {
+        "question": "Who holds the record for the most home runs in MLB history?",
+        "choices": ["Babe Ruth", "Barry Bonds", "Hank Aaron", "Ken Griffey Jr."],
+        "correctAnswer": "Barry Bonds"
+      },
+      {
+        "question": "In which sport is the 'Stanley Cup' awarded?",
+        "choices": ["Football", "Hockey", "Basketball", "Baseball"],
+        "correctAnswer": "Hockey"
+      },
+      {
+        "question": "What is the term for a score of zero in tennis?",
+        "choices": ["Love", "Nil", "Zero", "None"],
+        "correctAnswer": "Love"
+      },
+      {
+        "question": "Which country won the 2022 FIFA World Cup?",
+        "choices": ["Argentina", "France", "Germany", "Brazil"],
+        "correctAnswer": "Argentina"
+      },
+      {
+        "question": "Which sport is played at the Winter Olympics involving sliding down an icy track?",
+        "choices": ["Skiing", "Bobsleigh", "Snowboarding", "Curling"],
+        "correctAnswer": "Bobsleigh"
+      },
+      {
+        "question": "Which NFL team has won the most Super Bowls?",
+        "choices": ["Dallas Cowboys", "New England Patriots", "Pittsburgh Steelers", "San Francisco 49ers"],
+        "correctAnswer": "New England Patriots"
+      },
+      {
+        "question": "Which player has won the most NBA MVP awards?",
+        "choices": ["Michael Jordan", "LeBron James", "Kareem Abdul-Jabbar", "Magic Johnson"],
+        "correctAnswer": "Kareem Abdul-Jabbar"
+      },
+      {
+        "question": "In golf, what is the term for scoring one stroke under par on a hole?",
+        "choices": ["Birdie", "Eagle", "Bogey", "Double Bogey"],
+        "correctAnswer": "Birdie"
+      },
+      {
+        "question": "Which sport does Usain Bolt compete in?",
+        "choices": ["Football", "Basketball", "Tennis", "Track and Field"],
+        "correctAnswer": "Track and Field"
+      },
+      {
+        "question": "In which sport would you perform a slam dunk?",
+        "choices": ["Football", "Basketball", "Volleyball", "Rugby"],
+        "correctAnswer": "Basketball"
+      },
+      {
+        "question": "Which famous athlete is known as 'The Greatest of All Time' (GOAT) in boxing?",
+        "choices": ["Muhammad Ali", "Mike Tyson", "Floyd Mayweather", "Sugar Ray Leonard"],
+        "correctAnswer": "Muhammad Ali"
+      },
+      {
+        "question": "What is the name of the tennis Grand Slam played in London?",
+        "choices": ["Australian Open", "French Open", "Wimbledon", "US Open"],
+        "correctAnswer": "Wimbledon"
+      },
+      {
+        "question": "Which NFL team has the most Super Bowl appearances?",
+        "choices": ["Dallas Cowboys", "Pittsburgh Steelers", "New England Patriots", "San Francisco 49ers"],
+        "correctAnswer": "New England Patriots"
+      },
+      {
+        "question": "Who wrote the novel '1984'?",
+        "choices": ["Aldous Huxley", "George Orwell", "Ray Bradbury", "H.G. Wells"],
+        "correctAnswer": "George Orwell"
+      },
+      {
+        "question": "Which fictional wizard attended Hogwarts School of Witchcraft and Wizardry?",
+        "choices": ["Harry Potter", "Gandalf", "Hermione Granger", "Albus Dumbledore"],
+        "correctAnswer": "Harry Potter"
+      },
+      {
+        "question": "In which book would you find the character Frodo Baggins?",
+        "choices": ["The Hobbit", "The Lord of the Rings", "Harry Potter", "Narnia"],
+        "correctAnswer": "The Lord of the Rings"
+      },
+      {
+        "question": "Who is the author of the 'Game of Thrones' book series?",
+        "choices": ["J.R.R. Tolkien", "George R.R. Martin", "J.K. Rowling", "Isaac Asimov"],
+        "correctAnswer": "George R.R. Martin"
+      },
+      {
+        "question": "Which fictional detective is known for saying 'Elementary, my dear Watson'?",
+        "choices": ["Sherlock Holmes", "Hercule Poirot", "Sam Spade", "Miss Marple"],
+        "correctAnswer": "Sherlock Holmes"
+      },
+      {
+        "question": "In which book series is the character Katniss Everdeen the main protagonist?",
+        "choices": ["The Hunger Games", "Divergent", "Twilight", "The Maze Runner"],
+        "correctAnswer": "The Hunger Games"
+      },
+      {
+        "question": "Who wrote the novel 'Pride and Prejudice'?",
+        "choices": ["Charlotte Brontë", "Jane Austen", "Emily Dickinson", "Virginia Woolf"],
+        "correctAnswer": "Jane Austen"
+      },
+      {
+        "question": "What is the name of the fictional town where Stephen King's 'It' takes place?",
+        "choices": ["Castle Rock", "Derry", "Salem's Lot", "Cujo"],
+        "correctAnswer": "Derry"
+      },
+      {
+        "question": "Which book features the character of Dracula?",
+        "choices": ["Frankenstein", "Dracula", "The Picture of Dorian Gray", "The Strange Case of Dr Jekyll and Mr Hyde"],
+        "correctAnswer": "Dracula"
+      },
+      {
+        "question": "Who is the author of 'The Catcher in the Rye'?",
+        "choices": ["F. Scott Fitzgerald", "J.D. Salinger", "Ernest Hemingway", "Mark Twain"],
+        "correctAnswer": "J.D. Salinger"
+      },
+      {
+        "question": "In which novel would you find the character Holden Caulfield?",
+        "choices": ["The Great Gatsby", "The Catcher in the Rye", "To Kill a Mockingbird", "Of Mice and Men"],
+        "correctAnswer": "The Catcher in the Rye"
+      },
+      {
+        "question": "In the 'Harry Potter' series, what is the name of the school headmaster?",
+        "choices": ["Severus Snape", "Gilderoy Lockhart", "Albus Dumbledore", "Minerva McGonagall"],
+        "correctAnswer": "Albus Dumbledore"
+      },
+      {
+        "question": "Which fictional creature is the main antagonist in 'Jurassic Park'?",
+        "choices": ["Tyrannosaurus Rex", "Velociraptor", "Brachiosaurus", "Triceratops"],
+        "correctAnswer": "Tyrannosaurus Rex"
+      },
+      {
+        "question": "Which famous fantasy book series includes the characters of Aragorn and Legolas?",
+        "choices": ["The Hobbit", "The Lord of the Rings", "Harry Potter", "A Song of Ice and Fire"],
+        "correctAnswer": "The Lord of the Rings"
+      },
+      {
+        "question": "In 'The Chronicles of Narnia,' who is the ruler of Narnia?",
+        "choices": ["Aslan", "Peter", "Edmund", "Lucy"],
+        "correctAnswer": "Aslan"
+      },
+      {
+        "question": "Which book features the character of Gatsby?",
+        "choices": ["The Great Gatsby", "The Catcher in the Rye", "Of Mice and Men", "A Streetcar Named Desire"],
+        "correctAnswer": "The Great Gatsby"
+      },
+      {
+        "question": "Who wrote the novel 'Brave New World'?",
+        "choices": ["Aldous Huxley", "Ray Bradbury", "George Orwell", "Philip K. Dick"],
+        "correctAnswer": "Aldous Huxley"
+      },
+      {
+        "question": "In the fictional world of 'The Hobbit,' what is the name of the dragon guarding the treasure?",
+        "choices": ["Smaug", "Fafnir", "Draco", "Saphira"],
+        "correctAnswer": "Smaug"
+      },
+      {
+        "question": "Which novel features the character of the mad hatter?",
+        "choices": ["Peter Pan", "The Wizard of Oz", "Alice's Adventures in Wonderland", "Willy Wonka & the Chocolate Factory"],
+        "correctAnswer": "Alice's Adventures in Wonderland"
+      },
+      {
+        "question": "What is the name of the fictional planet in 'The Hunger Games' series?",
+        "choices": ["Panem", "Zorath", "Arrakis", "Gondor"],
+        "correctAnswer": "Panem"
+      },
+      {
+        "question": "Who wrote the novel 'Frankenstein'?",
+        "choices": ["Mary Shelley", "Bram Stoker", "J.R.R. Tolkien", "Edgar Allan Poe"],
+        "correctAnswer": "Mary Shelley"
+      },
+      {
+        "question": "Who is known as the 'King of Pop'?",
+        "choices": ["Elvis Presley", "Michael Jackson", "Prince", "Justin Timberlake"],
+        "correctAnswer": "Michael Jackson"
+      },
+      {
+        "question": "Which movie features the character 'Jack Sparrow'?",
+        "choices": ["The Matrix", "Pirates of the Caribbean", "Indiana Jones", "Star Wars"],
+        "correctAnswer": "Pirates of the Caribbean"
+      },
+      {
+        "question": "Who won the first season of 'American Idol'?",
+        "choices": ["Kelly Clarkson", "Carrie Underwood", "Jennifer Hudson", "Clay Aiken"],
+        "correctAnswer": "Kelly Clarkson"
+      },
+      {
+        "question": "What was the title of Britney Spears' debut single?",
+        "choices": ["Toxic", "...Baby One More Time", "Oops!... I Did It Again", "I'm a Slave 4 U"],
+        "correctAnswer": "...Baby One More Time"
+      },
+      {
+        "question": "Which TV show features a character named Sheldon Cooper?",
+        "choices": ["Friends", "The Big Bang Theory", "How I Met Your Mother", "The Office"],
+        "correctAnswer": "The Big Bang Theory"
+      },
+      {
+        "question": "Which singer is known as 'The Weeknd'?",
+        "choices": ["Sam Smith", "The Weeknd", "Drake", "Khalid"],
+        "correctAnswer": "The Weeknd"
+      },
+      {
+        "question": "In the 'Marvel Cinematic Universe,' who plays Iron Man?",
+        "choices": ["Chris Hemsworth", "Robert Downey Jr.", "Chris Evans", "Mark Ruffalo"],
+        "correctAnswer": "Robert Downey Jr."
+      },
+      {
+        "question": "Which animated movie features a character named Elsa?",
+        "choices": ["Cinderella", "Frozen", "Moana", "Tangled"],
+        "correctAnswer": "Frozen"
+      },
+      {
+        "question": "Who played the character of 'Hermione Granger' in the 'Harry Potter' films?",
+        "choices": ["Emma Watson", "Rupert Grint", "Daniel Radcliffe", "Bonnie Wright"],
+        "correctAnswer": "Emma Watson"
+      },
+      {
+        "question": "What is the name of the fictional superhero team in the movie 'Avengers'?",
+        "choices": ["Justice League", "X-Men", "Avengers", "Fantastic Four"],
+        "correctAnswer": "Avengers"
+      },
+      {
+        "question": "Which band performed the hit song 'Bohemian Rhapsody'?",
+        "choices": ["The Beatles", "Queen", "The Rolling Stones", "Led Zeppelin"],
+        "correctAnswer": "Queen"
+      },
+      {
+        "question": "Which video game features a character named Mario?",
+        "choices": ["Super Mario Bros.", "Zelda", "Pokémon", "Sonic the Hedgehog"],
+        "correctAnswer": "Super Mario Bros."
+      },
+      {
+        "question": "Which famous artist released the album 'Lemonade'?",
+        "choices": ["Ariana Grande", "Beyoncé", "Lady Gaga", "Taylor Swift"],
+        "correctAnswer": "Beyoncé"
+      },
+      {
+        "question": "What year did the TV show 'Friends' premiere?",
+        "choices": ["1992", "1994", "1996", "1998"],
+        "correctAnswer": "1994"
+      },
+      {
+        "question": "Which actress played the character of 'Wonder Woman' in the DC Extended Universe?",
+        "choices": ["Gal Gadot", "Scarlett Johansson", "Angelina Jolie", "Emma Stone"],
+        "correctAnswer": "Gal Gadot"
+      },
+      {
+        "question": "What is the name of the fictional school in the 'Harry Potter' series?",
+        "choices": ["Hogwarts", "Xavier's School", "Sky High", "Neverland Academy"],
+        "correctAnswer": "Hogwarts"
+      },
+      {
+        "question": "Which pop star's real name is Stefani Joanne Angelina Germanotta?",
+        "choices": ["Lady Gaga", "Katy Perry", "Rihanna", "Selena Gomez"],
+        "correctAnswer": "Lady Gaga"
+      },
+      {
+        "question": "Which TV show features a talking bear named BoJack?",
+        "choices": ["BoJack Horseman", "Rick and Morty", "Family Guy", "The Simpsons"],
+        "correctAnswer": "BoJack Horseman"
+      },
+      {
+        "question": "Which superhero is known for saying 'I am Iron Man'?",
+        "choices": ["Captain America", "Spider-Man", "Iron Man", "Thor"],
+        "correctAnswer": "Iron Man"
+      },
+      {
+        "question": "Who was the first winner of 'The Voice'?",
+        "choices": ["Cassadee Pope", "Blake Shelton", "Jordan Smith", "Javier Colon"],
+        "correctAnswer": "Javier Colon"
+      },
+      {
+        "question": "In which movie would you find the character 'Dory'?",
+        "choices": ["Finding Nemo", "Monsters, Inc.", "Toy Story", "The Incredibles"],
+        "correctAnswer": "Finding Nemo"
+      }
+          
+      
+]
+      
+      
